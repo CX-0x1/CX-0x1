@@ -7,63 +7,88 @@
 
     <title>CX_0x1 | SYSTEM MASTER</title>
 
-    <meta name="description"
-        content="CX_0x1 kişisel portföy sitesi. Web geliştirme, yaratıcı kodlama ve sistem mimarisi.">
-    <meta name="keywords"
-        content="CX_0x1, Developer, Full Stack, Web Development, React, Node.js, Python">
-    <meta name="author" content="Berat">
-    <meta name="theme-color" content="#050505">
-
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://cx0x1.is-a.dev/">
-    <meta property="og:title" content="CX_0x1 | SYSTEM MASTER">
-    <meta property="og:description" content="Full Stack Developer & Creative Coder">
-    <meta property="og:image" content="https://cx0x1.is-a.dev/CX_logo.jpg">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="CX_0x1 | SYSTEM MASTER">
-    <meta name="twitter:description" content="Full Stack Developer & Creative Coder">
-    <meta name="twitter:image" content="https://cx0x1.is-a.dev/CX_logo.jpg">
-
-    <link rel="canonical" href="https://cx0x1.is-a.dev/">
     <link rel="icon" type="image/jpeg" href="CX_logo.jpg">
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap">
 
     <style>
         :root {
             --gold: #d4af37;
             --gold-light: #f0e68c;
-            --bg: #050505;
-            --card-bg: rgba(10, 10, 10, 0.68);
+            --dark: #050505;
+            --card: rgba(10, 10, 10, .72);
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
             font-family: "Poppins", sans-serif;
         }
 
-        html {
+        html,
+        body {
+            width: 100%;
             min-height: 100%;
-            background: var(--bg);
         }
 
         body {
             min-height: 100vh;
-            width: 100%;
             overflow-x: hidden;
-            overflow-y: auto;
-            color: #fff;
-            background-color: var(--bg);
-            background-image: radial-gradient(#222 1px, transparent 1px);
+            color: white;
+            background: var(--dark);
+            isolation: isolate;
+        }
+
+        /* ARKA PLAN VİDEOSU */
+
+        #bg-video {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(3px) brightness(.55);
+            transform: scale(1.05);
+            pointer-events: none;
+        }
+
+        body::before {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            background-image: radial-gradient(
+                rgba(255, 255, 255, .13) 1px,
+                transparent 1px
+            );
             background-size: 25px 25px;
-            position: relative;
+            content: "";
+            pointer-events: none;
+        }
+
+        #snow-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        #audio-visualizer {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 4;
+            width: 100%;
+            height: 25vh;
+            pointer-events: none;
         }
 
         /* LOADER */
@@ -80,16 +105,13 @@
         }
 
         .loader-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 22px;
             text-align: center;
         }
 
         .spinner {
             width: 52px;
             height: 52px;
+            margin: 0 auto 22px;
             border: 3px solid rgba(212, 175, 55, .3);
             border-top-color: var(--gold);
             border-radius: 50%;
@@ -97,13 +119,12 @@
         }
 
         .click-text {
-            color: #fff;
+            color: white;
             font-size: clamp(1rem, 4vw, 1.5rem);
-            letter-spacing: 2px;
             font-weight: 700;
-            text-shadow: 0 0 15px rgba(212, 175, 55, .6);
+            letter-spacing: 2px;
             cursor: pointer;
-            user-select: none;
+            text-shadow: 0 0 15px rgba(212, 175, 55, .7);
         }
 
         .click-text:hover {
@@ -116,171 +137,123 @@
             }
         }
 
-        /* BACKGROUND */
-
-        #bg-video {
-            position: fixed;
-            inset: 0;
-            z-index: -2;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: blur(3px) brightness(.55);
-            transform: scale(1.05);
-        }
-
-        #snow-canvas {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        #audio-visualizer {
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            z-index: 4;
-            width: 100%;
-            height: 25vh;
-            pointer-events: none;
-        }
-
-        /* CURSOR */
+        /* ÖZEL MOUSE */
 
         .cursor-dot,
         .cursor-outline {
             position: fixed;
-            z-index: 200000;
-            pointer-events: none;
+            z-index: 999999;
+            display: block;
             border-radius: 50%;
+            pointer-events: none;
             transform: translate(-50%, -50%);
         }
 
         .cursor-dot {
-            width: 6px;
-            height: 6px;
-            background: #fff;
+            width: 7px;
+            height: 7px;
+            background: white;
         }
 
         .cursor-outline {
-            width: 30px;
-            height: 30px;
-            border: 2px solid rgba(255, 255, 255, .35);
-            transition: width .25s ease, height .25s ease, background .25s ease,
+            width: 32px;
+            height: 32px;
+            border: 2px solid rgba(255, 255, 255, .45);
+            transition:
+                width .25s ease,
+                height .25s ease,
+                background .25s ease,
                 border-color .25s ease;
         }
 
         .cursor-hover .cursor-dot {
-            width: 4px;
-            height: 4px;
+            width: 5px;
+            height: 5px;
             background: var(--gold);
         }
 
         .cursor-hover .cursor-outline {
-            width: 42px;
-            height: 42px;
-            border-color: rgba(212, 175, 55, .7);
-            background: rgba(212, 175, 55, .1);
+            width: 44px;
+            height: 44px;
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, .12);
         }
 
-        /* MAIN */
+        @media (hover: hover) and (pointer: fine) {
+            html.custom-cursor-active,
+            html.custom-cursor-active * {
+                cursor: none !important;
+            }
+        }
+
+        /* ANA ALAN */
 
         .main-wrapper {
             position: relative;
             z-index: 5;
-            width: 100%;
-            min-height: 100vh;
-            padding: 40px 20px;
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 100%;
+            min-height: 100vh;
+            padding: 40px 20px 80px;
             perspective: 1200px;
         }
 
         .card {
             position: relative;
             z-index: 10;
-            width: min(440px, 90vw);
-            max-height: calc(100vh - 80px);
-            padding: 40px 36px 100px;
-            overflow-y: auto;
+            width: min(440px, 94vw);
+            min-height: 650px;
+            padding: 40px 30px 105px;
+            overflow: hidden;
             text-align: center;
-            border: 1px solid rgba(212, 175, 55, .3);
-            border-radius: 32px;
-            background: var(--card-bg);
+            border: 1px solid rgba(212, 175, 55, .35);
+            border-radius: 30px;
+            background: var(--card);
+            box-shadow: 0 0 35px rgba(212, 175, 55, .12);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 0 30px rgba(212, 175, 55, .1);
             transform-style: preserve-3d;
-            transition: box-shadow .4s ease, transform .1s ease;
-            scrollbar-width: thin;
-            scrollbar-color: var(--gold) transparent;
-        }
-
-        .card::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        .card::-webkit-scrollbar-thumb {
-            background: var(--gold);
-            border-radius: 20px;
         }
 
         .card::after {
-            content: "";
             position: absolute;
             inset: 0;
-            z-index: 20;
-            pointer-events: none;
+            z-index: -1;
             background: radial-gradient(
                 circle at var(--glare-x, 50%) var(--glare-y, 50%),
-                rgba(255, 255, 255, .08),
+                rgba(255, 255, 255, .09),
                 transparent 60%
             );
+            content: "";
+            pointer-events: none;
         }
-
-        .card:hover {
-            box-shadow: 0 20px 60px rgba(212, 175, 55, .2);
-        }
-
-        /* PROFILE */
 
         .profile-wrapper {
             position: relative;
             width: 125px;
             height: 125px;
             margin: 0 auto 20px;
-            transform: translateZ(50px);
-            transition: transform .4s ease;
-        }
-
-        .profile-wrapper:hover {
-            transform: scale(1.08) rotate(5deg) translateZ(80px);
         }
 
         .profile-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border: 3px solid rgba(255, 255, 255, .1);
+            border: 3px solid rgba(255, 255, 255, .15);
             border-radius: 50%;
-            background: #0a0a0a;
-            transition: .4s ease;
         }
 
         .profile-wrapper:hover .profile-img {
             border-color: var(--gold);
-            box-shadow: 0 0 25px rgba(212, 175, 55, .45);
+            box-shadow: 0 0 25px rgba(212, 175, 55, .6);
         }
 
         .status-indicator {
             position: absolute;
-            right: 5px;
-            bottom: 5px;
-            z-index: 2;
+            right: 3px;
+            bottom: 3px;
             width: 24px;
             height: 24px;
             border: 4px solid #0a0a0a;
@@ -303,18 +276,15 @@
             box-shadow: 0 0 12px #ed4245;
         }
 
-        /* TEXTS */
-
         h1 {
             display: inline-block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             color: transparent;
             font-size: 2rem;
-            font-weight: 700;
             background: linear-gradient(
                 90deg,
                 var(--gold),
-                #fff,
+                white,
                 #888,
                 var(--gold)
             );
@@ -322,9 +292,7 @@
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 12px rgba(212, 175, 55, .4));
             animation: shine 5s linear infinite;
-            transform: translateZ(40px);
         }
 
         @keyframes shine {
@@ -334,15 +302,12 @@
         }
 
         .custom-status {
-            display: inline-block;
-            max-width: 100%;
-            margin-bottom: 17px;
+            display: block;
+            margin-bottom: 18px;
             color: #bbb;
-            font-size: .9rem;
+            font-size: .85rem;
             font-style: italic;
-            line-height: 1.5;
             word-break: break-word;
-            transform: translateZ(30px);
         }
 
         .badge {
@@ -353,14 +318,10 @@
             font-size: .75rem;
             font-weight: 700;
             letter-spacing: 1px;
-            border: 1px solid rgba(212, 175, 55, .25);
+            border: 1px solid rgba(212, 175, 55, .3);
             border-radius: 10px;
             background: rgba(212, 175, 55, .1);
-            box-shadow: 0 4px 0 rgba(212, 175, 55, .2);
-            transform: translateZ(35px);
         }
-
-        /* SKILLS */
 
         .skills-container {
             display: flex;
@@ -368,37 +329,31 @@
             justify-content: center;
             gap: 8px;
             margin-bottom: 25px;
-            padding: 0 8px;
-            transform: translateZ(35px);
         }
 
         .skill-badge {
             padding: 5px 11px;
-            color: #c0c0c0;
+            color: #ccc;
             font-size: .7rem;
-            font-weight: 600;
-            letter-spacing: .5px;
-            border: 1px solid rgba(192, 192, 192, .2);
+            border: 1px solid rgba(255, 255, 255, .2);
             border-radius: 8px;
-            background: rgba(192, 192, 192, .08);
-            box-shadow: 0 3px 0 rgba(192, 192, 192, .15);
-            transition: .3s ease;
+            background: rgba(255, 255, 255, .08);
+            transition: .25s ease;
         }
 
         .skill-badge:hover {
-            color: #fff;
-            border-color: #c0c0c0;
-            background: rgba(192, 192, 192, .15);
+            color: white;
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, .15);
             transform: translateY(-2px);
         }
 
-        /* ACTIVITIES */
+        /* DISCORD AKTİVİTELERİ */
 
         .activities-wrapper {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            transform: translateZ(20px);
         }
 
         .activity-box {
@@ -407,23 +362,22 @@
             gap: 13px;
             padding: 15px;
             text-align: left;
-            border: 1px solid rgba(255, 255, 255, .06);
+            border: 1px solid rgba(255, 255, 255, .08);
             border-radius: 18px;
-            background: rgba(255, 255, 255, .03);
-            box-shadow: 0 4px 0 rgba(0, 0, 0, .3);
-            transition: .3s ease;
+            background: rgba(255, 255, 255, .04);
+            transition: .25s ease;
         }
 
         .activity-box:hover {
-            border-color: rgba(212, 175, 55, .35);
-            background: rgba(255, 255, 255, .07);
+            border-color: rgba(212, 175, 55, .45);
+            background: rgba(255, 255, 255, .08);
             transform: scale(1.02);
         }
 
         .activity-img {
             flex-shrink: 0;
-            width: 65px;
-            height: 65px;
+            width: 62px;
+            height: 62px;
             object-fit: cover;
             border-radius: 14px;
         }
@@ -431,62 +385,34 @@
         .activity-info {
             min-width: 0;
             flex: 1;
-            overflow: hidden;
         }
 
         .activity-header {
             color: var(--gold);
             font-size: .65rem;
-            font-weight: 800;
+            font-weight: 700;
             text-transform: uppercase;
         }
 
-        .activity-name {
+        .activity-name,
+        .activity-details {
             overflow: hidden;
-            color: #fff;
-            font-size: .92rem;
-            font-weight: 600;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }
+
+        .activity-name {
+            color: white;
+            font-size: .9rem;
+            font-weight: 600;
         }
 
         .activity-details {
-            overflow: hidden;
             color: #999;
-            font-size: .76rem;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            font-size: .74rem;
         }
 
-        /* SPOTIFY BARS */
-
-        .bars {
-            display: flex;
-            flex-shrink: 0;
-            align-items: flex-end;
-            gap: 2px;
-            height: 14px;
-            margin-left: auto;
-        }
-
-        .bar {
-            width: 3px;
-            height: 20%;
-            background: #1db954;
-            animation: bounce 1s ease-in-out infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                height: 20%;
-            }
-
-            50% {
-                height: 100%;
-            }
-        }
-
-        /* SOCIAL LINKS */
+        /* SOSYAL BUTONLAR */
 
         .social-links {
             display: flex;
@@ -495,10 +421,9 @@
             gap: 12px;
             margin-top: 30px;
             padding: 17px;
-            border: 1px solid rgba(212, 175, 55, .25);
-            border-radius: 24px;
+            border: 1px solid rgba(212, 175, 55, .3);
+            border-radius: 22px;
             background: rgba(212, 175, 55, .06);
-            transform: translateZ(25px);
         }
 
         .social-btn {
@@ -507,50 +432,43 @@
             justify-content: center;
             width: 48px;
             height: 48px;
-            color: #fff;
-            font-size: 1.35rem;
+            color: white;
+            font-size: 1.3rem;
             text-decoration: none;
-            border: 1px solid rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .12);
             border-radius: 14px;
-            background: rgba(255, 255, 255, .05);
-            transition: .3s ease;
+            background: rgba(255, 255, 255, .06);
+            transition: .25s ease;
         }
 
         .social-btn:hover {
-            color: #000;
+            color: black;
             background: var(--gold);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, .4);
             transform: translateY(-5px);
         }
 
-        .social-btn svg {
-            width: 22px;
-            height: 22px;
-        }
-
-        /* VOLUME */
+        /* SES */
 
         .volume-control {
             position: absolute;
-            left: 50%;
-            bottom: 51px;
-            z-index: 25;
+            right: 50%;
+            bottom: 52px;
+            z-index: 30;
             display: flex;
             align-items: center;
             gap: 10px;
             width: max-content;
-            max-width: calc(100% - 36px);
+            max-width: calc(100% - 30px);
             padding: 8px 15px;
-            border: 1px solid rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .15);
             border-radius: 30px;
-            background: rgba(0, 0, 0, .45);
-            transform: translateX(-50%) translateZ(20px);
+            background: rgba(0, 0, 0, .5);
+            transform: translateX(50%);
         }
 
         .volume-icon {
             width: 20px;
             color: #ccc;
-            font-size: 1.05rem;
             text-align: center;
             cursor: pointer;
         }
@@ -561,245 +479,79 @@
 
         input[type="range"] {
             width: 100px;
-            height: 4px;
-            appearance: none;
-            outline: none;
-            border-radius: 3px;
-            background: rgba(255, 255, 255, .2);
+            accent-color: var(--gold);
         }
 
-        input[type="range"]::-webkit-slider-thumb {
-            width: 13px;
-            height: 13px;
-            appearance: none;
-            border-radius: 50%;
-            background: #fff;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-webkit-slider-thumb:hover {
-            background: var(--gold);
-        }
-
-        /* VIEW COUNTER */
+        /* SAYAC */
 
         .view-counter {
             position: absolute;
-            left: 20px;
             bottom: 15px;
-            z-index: 25;
+            left: 20px;
+            z-index: 30;
             display: flex;
-            align-items: center;
             gap: 8px;
+            align-items: center;
             padding: 5px 12px;
             color: #bbb;
-            font-size: .85rem;
-            border: 1px solid rgba(255, 255, 255, .1);
+            font-size: .8rem;
+            border: 1px solid rgba(255, 255, 255, .12);
             border-radius: 20px;
-            background: rgba(0, 0, 0, .3);
+            background: rgba(0, 0, 0, .35);
         }
-
-        .view-counter i {
-            animation: eye-pulse 2s infinite;
-        }
-
-        @keyframes eye-pulse {
-            50% {
-                opacity: .5;
-            }
-        }
-
-        /* FOOTER */
 
         .footer-credit {
             position: fixed;
-            left: 50%;
             bottom: 8px;
+            left: 50%;
             z-index: 20;
-            color: rgba(255, 255, 255, .55);
+            color: rgba(255, 255, 255, .6);
             font-size: .72rem;
             letter-spacing: 1px;
             transform: translateX(-50%);
         }
 
-        /* TABLET AND MOBILE */
-
         @media (max-width: 768px) {
-            body {
-                min-height: 100svh;
-                background-size: 16px 16px;
-            }
-
             .main-wrapper {
+                align-items: flex-start;
                 min-height: 100svh;
                 padding: 25px 12px 85px;
-                align-items: flex-start;
-                perspective: none;
             }
 
             .card {
                 width: 100%;
-                max-width: 480px;
-                max-height: none;
-                margin: 0 auto;
-                padding: 30px 18px 95px;
-                border-radius: 24px;
-                transform: none !important;
-            }
-
-            .card:hover {
-                box-shadow: 0 10px 30px rgba(212, 175, 55, .1);
-            }
-
-            .profile-wrapper {
-                width: 105px;
-                height: 105px;
-                transform: none;
-            }
-
-            .profile-wrapper:hover {
-                transform: scale(1.04);
-            }
-
-            h1 {
-                max-width: 100%;
-                font-size: clamp(1.5rem, 8vw, 2rem);
-                word-break: break-word;
-            }
-
-            .custom-status {
-                font-size: .82rem;
-            }
-
-            .badge {
-                margin-bottom: 20px;
-                font-size: .68rem;
-            }
-
-            .skills-container {
-                gap: 7px;
-                padding: 0;
-                margin-bottom: 20px;
-            }
-
-            .skill-badge {
-                padding: 5px 9px;
-                font-size: .65rem;
-            }
-
-            .activity-box {
-                gap: 10px;
-                padding: 12px;
-                border-radius: 15px;
-            }
-
-            .activity-img {
-                width: 52px;
-                height: 52px;
-                border-radius: 11px;
-            }
-
-            .activity-name {
-                font-size: .82rem;
-            }
-
-            .activity-details {
-                font-size: .7rem;
-            }
-
-            .social-links {
-                gap: 9px;
-                margin-top: 24px;
-                padding: 13px 8px;
-                border-radius: 18px;
-            }
-
-            .social-btn {
-                width: 43px;
-                height: 43px;
-                font-size: 1.15rem;
-                border-radius: 12px;
-            }
-
-            .volume-control {
-                bottom: 51px;
-                width: calc(100% - 36px);
-                max-width: none;
-                justify-content: center;
-            }
-
-            input[type="range"] {
-                width: 100%;
-                min-width: 0;
-            }
-
-            .view-counter {
-                left: 50%;
-                bottom: 14px;
-                width: max-content;
-                font-size: .78rem;
-                transform: translateX(-50%);
+                min-height: 680px;
+                padding: 30px 18px 100px;
             }
 
             .cursor-dot,
             .cursor-outline,
             #audio-visualizer {
-                display: none;
+                display: none !important;
+            }
+
+            .volume-control {
+                width: calc(100% - 36px);
+                justify-content: center;
+            }
+
+            input[type="range"] {
+                width: 100%;
+            }
+
+            .view-counter {
+                right: 50%;
+                left: auto;
+                transform: translateX(50%);
             }
 
             .footer-credit {
                 position: static;
                 width: 100%;
-                padding-bottom: 18px;
+                padding-top: 20px;
                 text-align: center;
                 transform: none;
-                font-size: .68rem;
             }
-        }
-
-        /* KÜÇÜK TELEFONLAR */
-
-        @media (max-width: 380px) {
-            .main-wrapper {
-                padding-right: 8px;
-                padding-left: 8px;
-            }
-
-            .card {
-                padding-right: 13px;
-                padding-left: 13px;
-            }
-
-            .social-links {
-                gap: 6px;
-            }
-
-            .social-btn {
-                width: 39px;
-                height: 39px;
-            }
-
-            .skill-badge {
-                padding: 4px 7px;
-                font-size: .6rem;
-            }
-        }
-
-        /* DOKUNMATİK CİHAZLAR */
-
-        @media (hover: none) and (pointer: coarse) {
-            .card:hover,
-            .activity-box:hover,
-            .social-btn:hover,
-            .profile-wrapper:hover,
-            .skill-badge:hover {
-                transform: none;
-            }
-        }
-
-        ::selection {
-            color: #fff;
-            background: rgba(212, 175, 55, .4);
         }
     </style>
 </head>
@@ -809,18 +561,18 @@
     <div id="loader">
         <div class="loader-content">
             <div class="spinner"></div>
-            <h1 style="font-size: 1.2rem; animation: none;">
-                LOADING
-            </h1>
+            <div class="click-text">LOADING</div>
         </div>
     </div>
 
+    <!-- ARKA PLAN VİDEOSU -->
     <video id="bg-video" autoplay loop muted playsinline preload="auto">
-        <source src="video.mp4" type="video/mp4">
+        <source src="./video.mp4" type="video/mp4">
     </video>
 
+    <!-- MÜZİK -->
     <audio id="bg-music" preload="auto" loop>
-        <source src="music.mp3" type="audio/mpeg">
+        <source src="./music.mp3" type="audio/mpeg">
     </audio>
 
     <canvas id="snow-canvas"></canvas>
@@ -830,23 +582,19 @@
     <div class="cursor-outline"></div>
 
     <main class="main-wrapper">
-
         <section class="card">
 
             <div class="profile-wrapper">
-                <img src="CX_logo.jpg" alt="CX_0x1 profil fotoğrafı" class="profile-img">
-                <div class="status-indicator" id="status-dot"></div>
+                <img class="profile-img" src="./CX_logo.jpg"
+                    alt="CX_0x1 profil fotoğrafı">
+                <div id="status-dot" class="status-indicator"></div>
             </div>
 
-            <h1 id="username">CX_0x1</h1>
-
-            <br>
+            <h1>CX_0x1</h1>
 
             <div id="custom-status" class="custom-status">
                 Connecting...
             </div>
-
-            <br>
 
             <div class="badge">
                 SYSTEM MASTER
@@ -863,83 +611,72 @@
                 <span class="skill-badge">C#</span>
             </div>
 
-            <div class="activities-wrapper" id="activities-wrapper">
-                <div class="activity-box" style="justify-content:center; opacity:.3;">
+            <div id="activities-wrapper" class="activities-wrapper">
+                <div class="activity-box"
+                    style="justify-content:center;opacity:.4;">
                     Connecting...
                 </div>
             </div>
 
             <div class="social-links">
-
-                <a href="https://github.com/CX-0x1"
+                <a class="social-btn"
+                    href="https://github.com/CX-0x1"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="social-btn"
-                    title="GitHub"
                     aria-label="GitHub">
                     <i class="fab fa-github"></i>
                 </a>
 
-                <a href="https://discord.com/users/959353098369921055"
+                <a class="social-btn"
+                    href="https://discord.com/users/959353098369921055"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="social-btn"
-                    title="Discord"
                     aria-label="Discord">
                     <i class="fab fa-discord"></i>
                 </a>
 
-                <a href="https://www.instagram.com/codex_services.1545/"
+                <a class="social-btn"
+                    href="https://www.instagram.com/codex_services.1545/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="social-btn"
-                    title="Instagram"
                     aria-label="Instagram">
                     <i class="fab fa-instagram"></i>
                 </a>
 
-                <a href="mailto:codexservices1434@gmail.com"
-                    class="social-btn"
-                    title="E-posta"
-                    aria-label="E-posta gönder">
+                <a class="social-btn"
+                    href="mailto:codexservices1434@gmail.com"
+                    aria-label="E-posta">
                     <i class="fas fa-envelope"></i>
                 </a>
 
-                <a href="https://www.patreon.com/cw/CX_0x1"
+                <a class="social-btn"
+                    href="https://www.patreon.com/cw/CX_0x1"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="social-btn"
-                    title="Patreon"
                     aria-label="Patreon">
-
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path fill="currentColor"
-                            d="M22.957 7.21c-.004-3.064-2.391-5.576-5.191-6.482-3.478-1.125-8.064-.962-11.384.604C2.357 3.231 1.093 7.391 1.046 11.54c-.039 3.411.302 12.396 5.369 12.46 3.765.047 4.326-4.804 6.068-7.141 1.24-1.662 2.836-2.132 4.801-2.618 3.376-.836 5.678-3.501 5.673-7.031">
-                        </path>
-                    </svg>
+                    <i class="fab fa-patreon"></i>
                 </a>
-
             </div>
 
             <div class="volume-control">
-                <i class="fas fa-play volume-icon"
-                    id="play-icon"
-                    title="Müziği başlat/durdur"
+                <i id="play-icon"
+                    class="fas fa-play volume-icon"
                     role="button"
-                    tabindex="0"></i>
+                    tabindex="0"
+                    aria-label="Müziği başlat"></i>
 
-                <i class="fas fa-volume-mute volume-icon"
-                    id="vol-icon"
-                    title="Sesi kapat/aç"
+                <i id="vol-icon"
+                    class="fas fa-volume-down volume-icon"
                     role="button"
-                    tabindex="0"></i>
+                    tabindex="0"
+                    aria-label="Sesi kapat"></i>
 
-                <input type="range"
-                    id="vol-slider"
+                <input id="vol-slider"
+                    type="range"
                     min="0"
                     max="1"
-                    step="0.01"
-                    value="0.3"
+                    step=".01"
+                    value=".3"
                     aria-label="Ses seviyesi">
             </div>
 
@@ -958,40 +695,54 @@
     <script>
         const DISCORD_ID = "959353098369921055";
 
-        /* ---------------- AUDIO ---------------- */
-
-        const audio = document.getElementById("bg-music");
         const video = document.getElementById("bg-video");
-        const slider = document.getElementById("vol-slider");
-        const volumeIcon = document.getElementById("vol-icon");
+        const audio = document.getElementById("bg-music");
         const playIcon = document.getElementById("play-icon");
+        const volumeIcon = document.getElementById("vol-icon");
+        const slider = document.getElementById("vol-slider");
 
-        const VOLUME_STORAGE = "cx_volume";
-        const savedVolume = localStorage.getItem(VOLUME_STORAGE);
+        /* VİDEO */
 
-        let lastVolume = .3;
-        let currentVolume = savedVolume !== null
-            ? Number(savedVolume)
-            : .3;
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
 
-        if (!Number.isFinite(currentVolume)) {
-            currentVolume = .3;
+        function startVideo() {
+            video.play().catch(error => {
+                console.warn("Video başlatılamadı:", error);
+            });
         }
 
-        audio.volume = Math.max(0, Math.min(1, currentVolume));
+        window.addEventListener("load", startVideo);
+
+        document.addEventListener("pointerdown", startVideo, {
+            once: true
+        });
+
+        /* SES */
+
+        const savedVolume = Number(
+            localStorage.getItem("cx_volume") || ".3"
+        );
+
+        audio.volume = Math.max(0, Math.min(1, savedVolume));
         slider.value = audio.volume;
 
-        if (audio.volume > 0) {
-            lastVolume = audio.volume;
-        }
+        let lastVolume = audio.volume || .3;
+        let audioContext = null;
+        let analyser = null;
+        let audioSource = null;
 
-        function updateVolumeIcon(volume) {
-            if (volume === 0) {
-                volumeIcon.className = "fas fa-volume-mute volume-icon";
-            } else if (volume < .5) {
-                volumeIcon.className = "fas fa-volume-down volume-icon";
+        function updateVolumeIcon() {
+            if (audio.volume === 0) {
+                volumeIcon.className =
+                    "fas fa-volume-mute volume-icon";
+            } else if (audio.volume < .5) {
+                volumeIcon.className =
+                    "fas fa-volume-down volume-icon";
             } else {
-                volumeIcon.className = "fas fa-volume-up volume-icon";
+                volumeIcon.className =
+                    "fas fa-volume-up volume-icon";
             }
         }
 
@@ -1001,23 +752,52 @@
                 : "fas fa-pause volume-icon";
         }
 
+        function initVisualizer() {
+            if (audioContext) {
+                return;
+            }
+
+            try {
+                const AudioContext =
+                    window.AudioContext ||
+                    window.webkitAudioContext;
+
+                audioContext = new AudioContext();
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 64;
+                analyser.smoothingTimeConstant = .92;
+
+                audioSource =
+                    audioContext.createMediaElementSource(audio);
+
+                audioSource.connect(analyser);
+                analyser.connect(audioContext.destination);
+
+                drawVisualizer();
+            } catch (error) {
+                console.warn("Visualizer başlatılamadı:", error);
+            }
+        }
+
         async function playMusic() {
             try {
                 if (audio.volume <= 0) {
                     audio.volume = .3;
                     slider.value = .3;
                     lastVolume = .3;
-                    localStorage.setItem(VOLUME_STORAGE, ".3");
-                    updateVolumeIcon(.3);
                 }
 
                 await audio.play();
 
-                if (audioContext && audioContext.state === "suspended") {
+                initVisualizer();
+
+                if (
+                    audioContext &&
+                    audioContext.state === "suspended"
+                ) {
                     await audioContext.resume();
                 }
 
-                initVisualizer();
                 updatePlayIcon();
             } catch (error) {
                 console.warn("Müzik başlatılamadı:", error);
@@ -1056,15 +836,8 @@
                 }
             }
 
-            localStorage.setItem(VOLUME_STORAGE, audio.volume);
-            updateVolumeIcon(audio.volume);
-        });
-
-        volumeIcon.addEventListener("keydown", event => {
-            if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                volumeIcon.click();
-            }
+            localStorage.setItem("cx_volume", audio.volume);
+            updateVolumeIcon();
         });
 
         slider.addEventListener("input", event => {
@@ -1076,24 +849,24 @@
                 lastVolume = value;
             }
 
-            localStorage.setItem(VOLUME_STORAGE, value);
-            updateVolumeIcon(value);
+            localStorage.setItem("cx_volume", value);
+            updateVolumeIcon();
 
             if (value > 0 && audio.paused) {
                 playMusic();
             }
         });
 
-        updateVolumeIcon(audio.volume);
+        updateVolumeIcon();
         updatePlayIcon();
 
-        /* ---------------- LOADER ---------------- */
+        /* LOADER */
 
         window.addEventListener("load", () => {
             const loader = document.getElementById("loader");
-            const loaderContent = document.querySelector(".loader-content");
+            const content = document.querySelector(".loader-content");
 
-            loaderContent.innerHTML = `
+            content.innerHTML = `
                 <div class="click-text">CLICK TO ENTER</div>
             `;
 
@@ -1101,24 +874,23 @@
                 loader.style.opacity = "0";
                 loader.style.visibility = "hidden";
 
-                video.play().catch(() => {});
+                startVideo();
                 playMusic();
             }, { once: true });
         });
 
-        /* ---------------- SNOW ---------------- */
+        /* KAR EFEKTİ */
 
         const snowCanvas = document.getElementById("snow-canvas");
         const snowContext = snowCanvas.getContext("2d");
-
         let flakes = [];
 
         function resizeSnow() {
-            snowCanvas.width = window.innerWidth;
-            snowCanvas.height = window.innerHeight;
+            snowCanvas.width = innerWidth;
+            snowCanvas.height = innerHeight;
 
             flakes = Array.from({
-                length: window.innerWidth < 768 ? 35 : 75
+                length: innerWidth < 768 ? 35 : 75
             }, () => ({
                 x: Math.random() * snowCanvas.width,
                 y: Math.random() * snowCanvas.height,
@@ -1163,12 +935,115 @@
         resizeSnow();
         drawSnow();
 
-        /* ---------------- DISCORD LANYARD ---------------- */
+        /* ÖZEL MOUSE */
+
+        const dot = document.querySelector(".cursor-dot");
+        const outline = document.querySelector(".cursor-outline");
+
+        const canUseCursor =
+            matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+        let mouseX = innerWidth / 2;
+        let mouseY = innerHeight / 2;
+        let outlineX = mouseX;
+        let outlineY = mouseY;
+
+        if (canUseCursor) {
+            document.documentElement.classList.add(
+                "custom-cursor-active"
+            );
+
+            dot.style.left = `${mouseX}px`;
+            dot.style.top = `${mouseY}px`;
+            outline.style.left = `${outlineX}px`;
+            outline.style.top = `${outlineY}px`;
+
+            document.addEventListener("mousemove", event => {
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+
+                dot.style.left = `${mouseX}px`;
+                dot.style.top = `${mouseY}px`;
+            }, { passive: true });
+
+            function animateCursor() {
+                outlineX += (mouseX - outlineX) * .15;
+                outlineY += (mouseY - outlineY) * .15;
+
+                outline.style.left = `${outlineX}px`;
+                outline.style.top = `${outlineY}px`;
+
+                requestAnimationFrame(animateCursor);
+            }
+
+            animateCursor();
+
+            document.addEventListener("mouseover", event => {
+                if (event.target.closest(
+                    "a, input, .activity-box, .profile-wrapper, .skill-badge, .volume-icon, .badge"
+                )) {
+                    document.body.classList.add("cursor-hover");
+                }
+            });
+
+            document.addEventListener("mouseout", event => {
+                if (!event.relatedTarget ||
+                    !event.relatedTarget.closest?.(
+                        "a, input, .activity-box, .profile-wrapper, .skill-badge, .volume-icon, .badge"
+                    )) {
+                    document.body.classList.remove("cursor-hover");
+                }
+            });
+        }
+
+        /* KART EĞİMİ */
+
+        const card = document.querySelector(".card");
+
+        document.addEventListener("mousemove", () => {
+            if (innerWidth <= 768) {
+                return;
+            }
+
+            const rotateX =
+                ((mouseY - innerHeight / 2) /
+                    (innerHeight / 2)) * -8;
+
+            const rotateY =
+                ((mouseX - innerWidth / 2) /
+                    (innerWidth / 2)) * 8;
+
+            const rect = card.getBoundingClientRect();
+
+            card.style.transform =
+                `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+            card.style.setProperty(
+                "--glare-x",
+                `${((mouseX - rect.left) / rect.width) * 100}%`
+            );
+
+            card.style.setProperty(
+                "--glare-y",
+                `${((mouseY - rect.top) / rect.height) * 100}%`
+            );
+        });
+
+        /* GÖRÜNÜM SAYACI */
+
+        const viewCount = document.getElementById("view-count");
+        const views = Number(localStorage.getItem("cx_views") || "0") + 1;
+
+        localStorage.setItem("cx_views", views);
+        viewCount.textContent = views;
+
+        /* DISCORD LANYARD */
 
         const avatar = document.querySelector(".profile-img");
         const statusDot = document.getElementById("status-dot");
         const customStatus = document.getElementById("custom-status");
-        const activitiesWrapper = document.getElementById("activities-wrapper");
+        const activitiesWrapper =
+            document.getElementById("activities-wrapper");
 
         function escapeHtml(value) {
             return String(value ?? "")
@@ -1179,20 +1054,11 @@
                 .replaceAll("'", "&#039;");
         }
 
-        function getAvatarUrl(user) {
-            if (!user || !user.avatar) {
-                return "CX_logo.jpg";
-            }
-
-            const extension = user.avatar.startsWith("a_")
-                ? "gif"
-                : "png";
-
-            return `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${extension}?size=512`;
-        }
-
         function getActivityImage(activity) {
-            if (!activity.assets || !activity.assets.large_image) {
+            if (
+                !activity.assets ||
+                !activity.assets.large_image
+            ) {
                 return "https://cdn.discordapp.com/embed/avatars/0.png";
             }
 
@@ -1210,7 +1076,9 @@
                 return "https://cdn.discordapp.com/embed/avatars/0.png";
             }
 
-            return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${image}.png`;
+            return `https://cdn.discordapp.com/app-assets/${
+                activity.application_id
+            }/${image}.png`;
         }
 
         function updateDiscord(data) {
@@ -1218,17 +1086,21 @@
                 return;
             }
 
-            if (data.discord_user) {
-                const discordAvatar = getAvatarUrl(data.discord_user);
+            if (data.discord_user?.avatar) {
+                const extension =
+                    data.discord_user.avatar.startsWith("a_")
+                        ? "gif"
+                        : "png";
 
-                if (discordAvatar !== "CX_logo.jpg") {
-                    avatar.src = discordAvatar;
-                }
+                avatar.src =
+                    `https://cdn.discordapp.com/avatars/` +
+                    `${data.discord_user.id}/` +
+                    `${data.discord_user.avatar}.${extension}?size=512`;
             }
 
             const status = data.discord_status || "offline";
-
-            statusDot.className = `status-indicator status-${status}`;
+            statusDot.className =
+                `status-indicator status-${status}`;
 
             const activities = Array.isArray(data.activities)
                 ? data.activities
@@ -1236,65 +1108,10 @@
 
             const custom = activities.find(activity => activity.type === 4);
 
-            if (custom && custom.state) {
-                let statusHtml = "";
-
-                if (custom.emoji) {
-                    if (custom.emoji.id) {
-                        statusHtml += `
-                            <img
-                                src="https://cdn.discordapp.com/emojis/${custom.emoji.id}.png"
-                                alt=""
-                                style="width:16px;height:16px;vertical-align:middle;margin-right:5px;"
-                            >
-                        `;
-                    } else if (custom.emoji.name) {
-                        statusHtml += `${escapeHtml(custom.emoji.name)} `;
-                    }
-                }
-
-                statusHtml += escapeHtml(custom.state);
-                customStatus.innerHTML = statusHtml;
-            } else {
-                customStatus.textContent = "Available";
-            }
+            customStatus.textContent =
+                custom?.state || "Available";
 
             let html = "";
-
-            if (data.listening_to_spotify && data.spotify) {
-                const spotify = data.spotify;
-
-                html += `
-                    <div class="activity-box">
-                        <img
-                            src="${escapeHtml(spotify.album_art_url)}"
-                            alt="Spotify albüm kapağı"
-                            class="activity-img"
-                        >
-
-                        <div class="activity-info">
-                            <div class="activity-header">
-                                Listening to Spotify
-                            </div>
-
-                            <div class="activity-name">
-                                ${escapeHtml(spotify.song)}
-                            </div>
-
-                            <div class="activity-details">
-                                ${escapeHtml(spotify.artist)}
-                            </div>
-                        </div>
-
-                        <div class="bars">
-                            <div class="bar"></div>
-                            <div class="bar" style="animation-delay:.1s"></div>
-                            <div class="bar" style="animation-delay:.2s"></div>
-                            <div class="bar" style="animation-delay:.3s"></div>
-                        </div>
-                    </div>
-                `;
-            }
 
             activities
                 .filter(activity =>
@@ -1305,9 +1122,9 @@
                     html += `
                         <div class="activity-box">
                             <img
+                                class="activity-img"
                                 src="${getActivityImage(activity)}"
                                 alt="Aktivite görseli"
-                                class="activity-img"
                             >
 
                             <div class="activity-info">
@@ -1329,179 +1146,57 @@
 
             activitiesWrapper.innerHTML = html || `
                 <div class="activity-box"
-                    style="justify-content:center;opacity:.3;">
+                    style="justify-content:center;opacity:.4;">
                     Inactive
                 </div>
             `;
         }
 
         function connectLanyard() {
-            let socket;
+            const socket = new WebSocket(
+                "wss://api.lanyard.rest/socket"
+            );
 
-            try {
-                socket = new WebSocket("wss://api.lanyard.rest/socket");
-
-                socket.addEventListener("open", () => {
-                    socket.send(JSON.stringify({
-                        op: 2,
-                        d: {
-                            subscribe_to_id: DISCORD_ID
-                        }
-                    }));
-                });
-
-                socket.addEventListener("message", event => {
-                    try {
-                        const packet = JSON.parse(event.data);
-
-                        if (
-                            packet.t === "INIT_STATE" ||
-                            packet.t === "PRESENCE_UPDATE"
-                        ) {
-                            updateDiscord(packet.d);
-                        }
-                    } catch (error) {
-                        console.warn("Discord verisi okunamadı:", error);
+            socket.addEventListener("open", () => {
+                socket.send(JSON.stringify({
+                    op: 2,
+                    d: {
+                        subscribe_to_id: DISCORD_ID
                     }
-                });
+                }));
+            });
 
-                socket.addEventListener("close", () => {
-                    setTimeout(connectLanyard, 5000);
-                });
+            socket.addEventListener("message", event => {
+                try {
+                    const packet = JSON.parse(event.data);
 
-                socket.addEventListener("error", () => {
-                    socket.close();
-                });
-            } catch (error) {
-                console.warn("Lanyard bağlantısı kurulamadı:", error);
-            }
+                    if (
+                        packet.t === "INIT_STATE" ||
+                        packet.t === "PRESENCE_UPDATE"
+                    ) {
+                        updateDiscord(packet.d);
+                    }
+                } catch (error) {
+                    console.warn("Discord verisi okunamadı:", error);
+                }
+            });
+
+            socket.addEventListener("close", () => {
+                setTimeout(connectLanyard, 5000);
+            });
+
+            socket.addEventListener("error", () => {
+                socket.close();
+            });
         }
 
         connectLanyard();
 
-        /* ---------------- VIEW COUNTER ---------------- */
+        /* SES GÖRSELLEŞTİRİCİSİ */
 
-        const viewCount = document.getElementById("view-count");
-        const storedViews = Number(localStorage.getItem("cx_views") || 0);
-        const newViews = storedViews + 1;
+        const visualizer =
+            document.getElementById("audio-visualizer");
 
-        localStorage.setItem("cx_views", newViews);
-        viewCount.textContent = newViews;
-
-        /* ---------------- CUSTOM CURSOR ---------------- */
-
-        const dot = document.querySelector(".cursor-dot");
-        const outline = document.querySelector(".cursor-outline");
-
-        let mouseX = 0;
-        let mouseY = 0;
-        let dotX = 0;
-        let dotY = 0;
-        let outlineX = 0;
-        let outlineY = 0;
-
-        document.addEventListener("mousemove", event => {
-            mouseX = event.clientX;
-            mouseY = event.clientY;
-        });
-
-        function animateCursor() {
-            dotX += (mouseX - dotX) * .2;
-            dotY += (mouseY - dotY) * .2;
-
-            outlineX += (mouseX - outlineX) * .1;
-            outlineY += (mouseY - outlineY) * .1;
-
-            dot.style.left = `${dotX}px`;
-            dot.style.top = `${dotY}px`;
-
-            outline.style.left = `${outlineX}px`;
-            outline.style.top = `${outlineY}px`;
-
-            requestAnimationFrame(animateCursor);
-        }
-
-        animateCursor();
-
-        document.querySelectorAll(
-            "a, input, .activity-box, .profile-wrapper, .skill-badge, .volume-icon"
-        ).forEach(element => {
-            element.addEventListener("mouseenter", () => {
-                document.body.classList.add("cursor-hover");
-            });
-
-            element.addEventListener("mouseleave", () => {
-                document.body.classList.remove("cursor-hover");
-            });
-        });
-
-        /* ---------------- 3D CARD EFFECT ---------------- */
-
-        const card = document.querySelector(".card");
-
-        let rotateX = 0;
-        let rotateY = 0;
-        let mouseOutside = false;
-
-        document.addEventListener("mouseleave", () => {
-            mouseOutside = true;
-        });
-
-        document.addEventListener("mouseenter", () => {
-            mouseOutside = false;
-        });
-
-        function animateCard() {
-            if (window.innerWidth <= 768) {
-                card.style.transform = "none";
-                requestAnimationFrame(animateCard);
-                return;
-            }
-
-            let targetX = 0;
-            let targetY = 0;
-
-            if (!mouseOutside) {
-                const limit = 15;
-
-                targetX =
-                    ((mouseY - window.innerHeight / 2) /
-                        (window.innerHeight / 2)) * -limit;
-
-                targetY =
-                    ((mouseX - window.innerWidth / 2) /
-                        (window.innerWidth / 2)) * limit;
-
-                const rect = card.getBoundingClientRect();
-
-                const glareX =
-                    ((mouseX - rect.left) / rect.width) * 100;
-
-                const glareY =
-                    ((mouseY - rect.top) / rect.height) * 100;
-
-                card.style.setProperty("--glare-x", `${glareX}%`);
-                card.style.setProperty("--glare-y", `${glareY}%`);
-            }
-
-            rotateX += (targetX - rotateX) * .1;
-            rotateY += (targetY - rotateY) * .1;
-
-            card.style.transform =
-                `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-
-            requestAnimationFrame(animateCard);
-        }
-
-        animateCard();
-
-        /* ---------------- AUDIO VISUALIZER ---------------- */
-
-        let audioContext = null;
-        let analyser = null;
-        let audioSource = null;
-
-        const visualizer = document.getElementById("audio-visualizer");
         const visualizerContext = visualizer.getContext("2d");
 
         function resizeVisualizer() {
@@ -1509,43 +1204,18 @@
             visualizer.height = visualizer.offsetHeight;
         }
 
-        function initVisualizer() {
-            if (audioContext) {
-                return;
-            }
-
-            try {
-                const AudioContext =
-                    window.AudioContext || window.webkitAudioContext;
-
-                audioContext = new AudioContext();
-                analyser = audioContext.createAnalyser();
-                analyser.fftSize = 64;
-                analyser.smoothingTimeConstant = .92;
-
-                audioSource = audioContext.createMediaElementSource(audio);
-                audioSource.connect(analyser);
-                analyser.connect(audioContext.destination);
-
-                resizeVisualizer();
-                drawVisualizer();
-            } catch (error) {
-                console.warn("Visualizer başlatılamadı:", error);
-            }
-        }
-
         function drawVisualizer() {
             if (!analyser) {
                 return;
             }
 
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
+            const length = analyser.frequencyBinCount;
+            const data = new Uint8Array(length);
 
             function draw() {
                 requestAnimationFrame(draw);
 
-                analyser.getByteFrequencyData(dataArray);
+                analyser.getByteFrequencyData(data);
 
                 visualizerContext.clearRect(
                     0,
@@ -1554,40 +1224,46 @@
                     visualizer.height
                 );
 
-                const usefulBins = Math.floor(bufferLength * .7);
+                const usefulBins = Math.floor(length * .7);
                 const halfWidth = visualizer.width / 2;
                 const barWidth = halfWidth / usefulBins;
 
                 for (let i = 0; i < usefulBins; i++) {
                     const height =
-                        (dataArray[i] * .8 / 255) *
-                        visualizer.height;
+                        data[i] / 255 *
+                        visualizer.height *
+                        .8;
 
-                    const gradient = visualizerContext.createLinearGradient(
-                        0,
-                        visualizer.height - height,
-                        0,
-                        visualizer.height
-                    );
+                    const gradient =
+                        visualizerContext.createLinearGradient(
+                            0,
+                            visualizer.height - height,
+                            0,
+                            visualizer.height
+                        );
 
                     gradient.addColorStop(0, "#d4af37");
-                    gradient.addColorStop(1, "rgba(212,175,55,0)");
+                    gradient.addColorStop(
+                        1,
+                        "rgba(212,175,55,0)"
+                    );
 
                     visualizerContext.fillStyle = gradient;
 
-                    const leftX = i * barWidth;
-                    const rightX =
-                        visualizer.width - ((i + 1) * barWidth);
+                    const left = i * barWidth;
+                    const right =
+                        visualizer.width -
+                        ((i + 1) * barWidth);
 
                     visualizerContext.fillRect(
-                        leftX,
+                        left,
                         visualizer.height - height,
                         barWidth - 1,
                         height
                     );
 
                     visualizerContext.fillRect(
-                        rightX,
+                        right,
                         visualizer.height - height,
                         barWidth - 1,
                         height
@@ -1600,36 +1276,6 @@
 
         window.addEventListener("resize", resizeVisualizer);
         resizeVisualizer();
-    </script>
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "CX_0x1",
-        "alternateName": "CX_0x1 Developer",
-        "url": "https://cx0x1.is-a.dev/",
-        "image": "https://cx0x1.is-a.dev/CX_logo.jpg",
-        "jobTitle": "Full Stack Developer",
-        "description": "Full Stack Developer and Creative Coder.",
-        "email": "codexservices1434@gmail.com",
-        "sameAs": [
-            "https://github.com/CX-0x1",
-            "https://discord.com/users/959353098369921055",
-            "https://www.instagram.com/codex_services.1545/",
-            "https://www.patreon.com/cw/CX_0x1"
-        ],
-        "knowsAbout": [
-            "HTML",
-            "CSS",
-            "React",
-            "JavaScript",
-            "Node.js",
-            "Python",
-            "C++",
-            "C#"
-        ]
-    }
     </script>
 
 </body>
