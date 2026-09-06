@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -7,91 +7,87 @@
 
     <title>CX_0x1 | SYSTEM MASTER</title>
 
+    <meta name="description"
+        content="CX_0x1 digital workspace. Creative coding, web development, system architecture and modern digital experiences.">
+
+    <meta name="keywords"
+        content="CX_0x1, CX-0x1, System Master, Web Developer, HTML, CSS, JavaScript, React, Node.js, Python">
+
+    <meta name="author" content="CX_0x1">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#050505">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cx0x1.is-a.dev/">
+    <meta property="og:title" content="CX_0x1 | SYSTEM MASTER">
+    <meta property="og:description" content="Accessing CX_0x1 digital system...">
+    <meta property="og:image" content="https://cx0x1.is-a.dev/CX_logo.jpg">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CX_0x1 | SYSTEM MASTER">
+    <meta name="twitter:description" content="Creative coding and digital system architecture.">
+    <meta name="twitter:image" content="https://cx0x1.is-a.dev/CX_logo.jpg">
+
+    <link rel="canonical" href="https://cx0x1.is-a.dev/">
     <link rel="icon" type="image/jpeg" href="CX_logo.jpg">
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap">
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
 
     <style>
         :root {
             --gold: #d4af37;
-            --gold-light: #f0e68c;
+            --gold-light: #f0d878;
             --dark: #050505;
-            --card: rgba(10, 10, 10, .72);
+            --card: rgba(10, 10, 10, 0.72);
+            --text: #ffffff;
+            --muted: #b8b8b8;
+            --soft-muted: #969696;
         }
 
-        * {
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: "Poppins", sans-serif;
         }
 
-        html,
-        body {
-            width: 100%;
+        html {
             min-height: 100%;
+            background: var(--dark);
         }
 
         body {
             min-height: 100vh;
-            overflow-x: hidden;
-            color: white;
-            background: var(--dark);
-            isolation: isolate;
-        }
-
-        /* ARKA PLAN VİDEOSU */
-
-        #bg-video {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: blur(3px) brightness(.55);
-            transform: scale(1.05);
-            pointer-events: none;
-        }
-
-        body::before {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            background-image: radial-gradient(
-                rgba(255, 255, 255, .13) 1px,
-                transparent 1px
-            );
+            overflow: hidden;
+            position: relative;
+            color: var(--text);
+            background-color: var(--dark);
+            background-image: radial-gradient(#252525 1px, transparent 1px);
             background-size: 25px 25px;
-            content: "";
-            pointer-events: none;
+            font-family: "Poppins", Arial, sans-serif;
+            font-weight: 400;
+            line-height: 1.5;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: auto;
+            -moz-osx-font-smoothing: auto;
         }
 
-        #snow-canvas {
-            position: fixed;
-            inset: 0;
-            z-index: 2;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+        ::selection {
+            color: #ffffff;
+            background: rgba(212, 175, 55, 0.5);
         }
 
-        #audio-visualizer {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 4;
-            width: 100%;
-            height: 25vh;
-            pointer-events: none;
+        a,
+        button,
+        input {
+            font: inherit;
         }
-
-        /* LOADER */
 
         #loader {
             position: fixed;
@@ -101,34 +97,38 @@
             align-items: center;
             justify-content: center;
             background: #050505;
-            transition: opacity .5s ease, visibility .5s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
 
         .loader-content {
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 22px;
         }
 
         .spinner {
             width: 52px;
             height: 52px;
-            margin: 0 auto 22px;
-            border: 3px solid rgba(212, 175, 55, .3);
+            border: 3px solid rgba(212, 175, 55, 0.25);
             border-top-color: var(--gold);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         .click-text {
-            color: white;
-            font-size: clamp(1rem, 4vw, 1.5rem);
-            font-weight: 700;
-            letter-spacing: 2px;
+            color: #ffffff;
             cursor: pointer;
-            text-shadow: 0 0 15px rgba(212, 175, 55, .7);
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-shadow: 0 0 16px rgba(212, 175, 55, 0.65);
+            transition: 0.3s ease;
         }
 
         .click-text:hover {
             color: var(--gold-light);
+            transform: scale(1.04);
         }
 
         @keyframes spin {
@@ -136,57 +136,6 @@
                 transform: rotate(360deg);
             }
         }
-
-        /* ÖZEL MOUSE */
-
-        .cursor-dot,
-        .cursor-outline {
-            position: fixed;
-            z-index: 999999;
-            display: block;
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-        }
-
-        .cursor-dot {
-            width: 7px;
-            height: 7px;
-            background: white;
-        }
-
-        .cursor-outline {
-            width: 32px;
-            height: 32px;
-            border: 2px solid rgba(255, 255, 255, .45);
-            transition:
-                width .25s ease,
-                height .25s ease,
-                background .25s ease,
-                border-color .25s ease;
-        }
-
-        .cursor-hover .cursor-dot {
-            width: 5px;
-            height: 5px;
-            background: var(--gold);
-        }
-
-        .cursor-hover .cursor-outline {
-            width: 44px;
-            height: 44px;
-            border-color: var(--gold);
-            background: rgba(212, 175, 55, .12);
-        }
-
-        @media (hover: hover) and (pointer: fine) {
-            html.custom-cursor-active,
-            html.custom-cursor-active * {
-                cursor: none !important;
-            }
-        }
-
-        /* ANA ALAN */
 
         .main-wrapper {
             position: relative;
@@ -196,38 +145,110 @@
             justify-content: center;
             width: 100%;
             min-height: 100vh;
-            padding: 40px 20px 80px;
             perspective: 1200px;
+        }
+
+        #bg-video {
+            position: fixed;
+            z-index: -2;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(3px) brightness(0.55);
+            transform: scale(1.05);
+        }
+
+        #snow-canvas {
+            position: fixed;
+            z-index: 1;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        #audio-visualizer {
+            position: fixed;
+            z-index: 4;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 25vh;
+            pointer-events: none;
+        }
+
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            z-index: 200000;
+            pointer-events: none;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background: #ffffff;
+            transition: 0.25s ease;
+        }
+
+        .cursor-outline {
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            transition: width 0.25s ease, height 0.25s ease,
+                border-color 0.25s ease, background 0.25s ease;
+        }
+
+        .cursor-hover .cursor-dot {
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+        }
+
+        .cursor-hover .cursor-outline {
+            width: 42px;
+            height: 42px;
+            border-color: rgba(212, 175, 55, 0.6);
+            background: rgba(212, 175, 55, 0.1);
         }
 
         .card {
             position: relative;
             z-index: 10;
-            width: min(440px, 94vw);
-            min-height: 650px;
-            padding: 40px 30px 105px;
+            width: 440px;
+            max-width: calc(100% - 32px);
+            margin: 24px auto;
+            padding: 42px 38px 86px;
             overflow: hidden;
             text-align: center;
-            border: 1px solid rgba(212, 175, 55, .35);
-            border-radius: 30px;
             background: var(--card);
-            box-shadow: 0 0 35px rgba(212, 175, 55, .12);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            border-radius: 32px;
+            box-shadow: 0 0 35px rgba(212, 175, 55, 0.12);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             transform-style: preserve-3d;
+            transition: box-shadow 0.4s ease;
         }
 
         .card::after {
             position: absolute;
+            z-index: 20;
             inset: 0;
-            z-index: -1;
-            background: radial-gradient(
-                circle at var(--glare-x, 50%) var(--glare-y, 50%),
-                rgba(255, 255, 255, .09),
-                transparent 60%
-            );
             content: "";
             pointer-events: none;
+            background: radial-gradient(
+                circle at var(--glare-x, 50%) var(--glare-y, 50%),
+                rgba(255, 255, 255, 0.1),
+                transparent 60%
+            );
+        }
+
+        .card:hover {
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.2);
         }
 
         .profile-wrapper {
@@ -235,30 +256,40 @@
             width: 125px;
             height: 125px;
             margin: 0 auto 20px;
+            transform: translateZ(50px);
+            transition: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .profile-wrapper:hover {
+            transform: translateZ(80px) scale(1.08) rotate(4deg);
         }
 
         .profile-img {
+            display: block;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border: 3px solid rgba(255, 255, 255, .15);
+            background: #0a0a0a;
+            border: 3px solid rgba(255, 255, 255, 0.12);
             border-radius: 50%;
+            transition: 0.4s ease;
         }
 
         .profile-wrapper:hover .profile-img {
             border-color: var(--gold);
-            box-shadow: 0 0 25px rgba(212, 175, 55, .6);
+            box-shadow: 0 0 28px rgba(212, 175, 55, 0.5);
         }
 
         .status-indicator {
             position: absolute;
-            right: 3px;
-            bottom: 3px;
+            right: 5px;
+            bottom: 5px;
+            z-index: 2;
             width: 24px;
             height: 24px;
+            background: #747f8d;
             border: 4px solid #0a0a0a;
             border-radius: 50%;
-            background: #747f8d;
         }
 
         .status-online {
@@ -277,22 +308,34 @@
         }
 
         h1 {
+            position: relative;
+            z-index: 2;
             display: inline-block;
-            margin-bottom: 8px;
-            color: transparent;
+            margin-bottom: 7px;
+            color: #ffffff;
             font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
             background: linear-gradient(
                 90deg,
                 var(--gold),
-                white,
-                #888,
+                #ffffff,
+                #aaaaaa,
                 var(--gold)
             );
             background-size: 300% 100%;
-            background-clip: text;
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.4));
+            transform: translateZ(40px);
             animation: shine 5s linear infinite;
+            transition: 0.4s ease;
+        }
+
+        h1:hover {
+            transform: translateZ(60px) scale(1.05);
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.65));
         }
 
         @keyframes shine {
@@ -303,24 +346,42 @@
 
         .custom-status {
             display: block;
-            margin-bottom: 18px;
-            color: #bbb;
-            font-size: .85rem;
+            min-height: 25px;
+            margin-bottom: 15px;
+            color: var(--muted);
+            font-size: 0.9rem;
             font-style: italic;
-            word-break: break-word;
+            font-weight: 500;
+            transform: translateZ(30px);
+            transition: 0.3s ease;
+        }
+
+        .custom-status:hover {
+            color: #ffffff;
+            transform: translateZ(45px) scale(1.02);
         }
 
         .badge {
             display: inline-block;
             margin-bottom: 25px;
-            padding: 6px 16px;
+            padding: 7px 17px;
             color: var(--gold);
-            font-size: .75rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            border: 1px solid rgba(212, 175, 55, .3);
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.35);
             border-radius: 10px;
-            background: rgba(212, 175, 55, .1);
+            box-shadow: 0 4px 0 rgba(212, 175, 55, 0.2);
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            transform: translateZ(35px);
+            transition: 0.3s ease;
+        }
+
+        .badge:hover {
+            background: rgba(212, 175, 55, 0.22);
+            border-color: var(--gold);
+            box-shadow: 0 6px 0 rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px) translateZ(50px);
         }
 
         .skills-container {
@@ -329,101 +390,145 @@
             justify-content: center;
             gap: 8px;
             margin-bottom: 25px;
+            padding: 0 8px;
+            transform: translateZ(35px);
         }
 
         .skill-badge {
-            padding: 5px 11px;
-            color: #ccc;
-            font-size: .7rem;
-            border: 1px solid rgba(255, 255, 255, .2);
+            display: inline-block;
+            padding: 5px 12px;
+            color: #d0d0d0;
+            background: rgba(192, 192, 192, 0.09);
+            border: 1px solid rgba(192, 192, 192, 0.22);
             border-radius: 8px;
-            background: rgba(255, 255, 255, .08);
-            transition: .25s ease;
+            box-shadow: 0 3px 0 rgba(192, 192, 192, 0.15);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: 0.3s ease;
         }
 
         .skill-badge:hover {
-            color: white;
-            border-color: var(--gold);
-            background: rgba(212, 175, 55, .15);
+            color: #ffffff;
+            background: rgba(192, 192, 192, 0.18);
+            border-color: #d0d0d0;
             transform: translateY(-2px);
         }
-
-        /* DISCORD AKTİVİTELERİ */
 
         .activities-wrapper {
             display: flex;
             flex-direction: column;
             gap: 15px;
+            transform: translateZ(20px);
         }
 
         .activity-box {
             display: flex;
             align-items: center;
-            gap: 13px;
-            padding: 15px;
+            gap: 15px;
+            padding: 16px;
             text-align: left;
-            border: 1px solid rgba(255, 255, 255, .08);
+            background: rgba(255, 255, 255, 0.045);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 18px;
-            background: rgba(255, 255, 255, .04);
-            transition: .25s ease;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+            transition: 0.3s ease;
         }
 
         .activity-box:hover {
-            border-color: rgba(212, 175, 55, .45);
-            background: rgba(255, 255, 255, .08);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(212, 175, 55, 0.4);
             transform: scale(1.02);
         }
 
         .activity-img {
             flex-shrink: 0;
-            width: 62px;
-            height: 62px;
+            width: 65px;
+            height: 65px;
             object-fit: cover;
             border-radius: 14px;
         }
 
         .activity-info {
-            min-width: 0;
             flex: 1;
+            min-width: 0;
+            overflow: hidden;
         }
 
         .activity-header {
-            color: var(--gold);
-            font-size: .65rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .activity-name,
-        .activity-details {
             overflow: hidden;
+            color: var(--gold);
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.4px;
             text-overflow: ellipsis;
+            text-transform: uppercase;
             white-space: nowrap;
         }
 
         .activity-name {
-            color: white;
-            font-size: .9rem;
-            font-weight: 600;
+            overflow: hidden;
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .activity-details {
-            color: #999;
-            font-size: .74rem;
+            overflow: hidden;
+            color: #b0b0b0;
+            font-size: 0.78rem;
+            font-weight: 500;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        /* SOSYAL BUTONLAR */
+        .bars {
+            display: flex;
+            align-items: flex-end;
+            flex-shrink: 0;
+            gap: 2px;
+            height: 14px;
+            margin-left: auto;
+        }
+
+        .bar {
+            width: 3px;
+            height: 20%;
+            background: #1db954;
+            animation: bounce 1s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%,
+            100% {
+                height: 20%;
+            }
+
+            50% {
+                height: 100%;
+            }
+        }
 
         .social-links {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 12px;
+            gap: 15px;
             margin-top: 30px;
-            padding: 17px;
-            border: 1px solid rgba(212, 175, 55, .3);
-            border-radius: 22px;
-            background: rgba(212, 175, 55, .06);
+            padding: 18px;
+            background: rgba(212, 175, 55, 0.07);
+            border: 1px solid rgba(212, 175, 55, 0.28);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateZ(25px);
+            transition: 0.4s ease;
+        }
+
+        .social-links:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: rgba(212, 175, 55, 0.5);
+            transform: translateY(-5px) translateZ(40px);
         }
 
         .social-btn {
@@ -432,57 +537,83 @@
             justify-content: center;
             width: 48px;
             height: 48px;
-            color: white;
-            font-size: 1.3rem;
-            text-decoration: none;
-            border: 1px solid rgba(255, 255, 255, .12);
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 14px;
-            background: rgba(255, 255, 255, .06);
-            transition: .25s ease;
+            font-size: 1.4rem;
+            text-decoration: none;
+            transition: 0.3s ease;
         }
 
         .social-btn:hover {
-            color: black;
+            color: #000000;
             background: var(--gold);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.5);
             transform: translateY(-5px);
         }
 
-        /* SES */
+        .social-btn svg {
+            width: 22px;
+            height: 22px;
+        }
 
         .volume-control {
             position: absolute;
-            right: 50%;
             bottom: 52px;
+            left: 50%;
             z-index: 30;
             display: flex;
             align-items: center;
             gap: 10px;
             width: max-content;
-            max-width: calc(100% - 30px);
-            padding: 8px 15px;
-            border: 1px solid rgba(255, 255, 255, .15);
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.48);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 30px;
-            background: rgba(0, 0, 0, .5);
-            transform: translateX(50%);
+            transform: translateX(-50%);
+            transition: 0.3s ease;
+        }
+
+        .volume-control:hover {
+            border-color: rgba(212, 175, 55, 0.5);
         }
 
         .volume-icon {
             width: 20px;
-            color: #ccc;
-            text-align: center;
+            color: #dddddd;
             cursor: pointer;
+            font-size: 1.1rem;
+            text-align: center;
+            transition: 0.2s ease;
         }
 
         .volume-icon:hover {
             color: var(--gold);
+            transform: scale(1.1);
         }
 
         input[type="range"] {
             width: 100px;
-            accent-color: var(--gold);
+            height: 4px;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 3px;
+            outline: none;
         }
 
-        /* SAYAC */
+        input[type="range"]::-webkit-slider-thumb {
+            width: 13px;
+            height: 13px;
+            appearance: none;
+            background: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: var(--gold);
+        }
 
         .view-counter {
             position: absolute;
@@ -490,53 +621,95 @@
             left: 20px;
             z-index: 30;
             display: flex;
-            gap: 8px;
             align-items: center;
+            gap: 8px;
             padding: 5px 12px;
-            color: #bbb;
-            font-size: .8rem;
-            border: 1px solid rgba(255, 255, 255, .12);
+            color: #c2c2c2;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 20px;
-            background: rgba(0, 0, 0, .35);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: 0.3s ease;
         }
 
-        .footer-credit {
-            position: fixed;
-            bottom: 8px;
-            left: 50%;
-            z-index: 20;
-            color: rgba(255, 255, 255, .6);
-            font-size: .72rem;
-            letter-spacing: 1px;
-            transform: translateX(-50%);
+        .view-counter:hover {
+            color: var(--gold);
+            background: rgba(212, 175, 55, 0.12);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        .view-counter i {
+            animation: eye-pulse 2s infinite;
+        }
+
+        @keyframes eye-pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.45;
+            }
         }
 
         @media (max-width: 768px) {
+            body {
+                min-height: 100vh;
+                overflow-y: auto;
+                background-size: 16px 16px;
+            }
+
             .main-wrapper {
+                min-height: 100vh;
                 align-items: flex-start;
-                min-height: 100svh;
-                padding: 25px 12px 85px;
+                padding: 30px 0;
+                perspective: none;
             }
 
             .card {
-                width: 100%;
-                min-height: 680px;
-                padding: 30px 18px 100px;
+                width: calc(100% - 28px);
+                max-width: 440px;
+                margin: 0 auto;
+                padding: 34px 20px 92px;
+                transform: none !important;
+            }
+
+            .card:hover {
+                box-shadow: 0 10px 30px rgba(212, 175, 55, 0.12);
+            }
+
+            .profile-wrapper {
+                transform: none;
+            }
+
+            .profile-wrapper:hover {
+                transform: scale(1.04);
+            }
+
+            h1 {
+                font-size: 1.75rem;
             }
 
             .cursor-dot,
-            .cursor-outline,
+            .cursor-outline {
+                display: none;
+            }
+
             #audio-visualizer {
-                display: none !important;
+                display: none;
             }
 
             .volume-control {
-                width: calc(100% - 36px);
+                bottom: 52px;
+                width: 76%;
                 justify-content: center;
             }
 
             input[type="range"] {
-                width: 100%;
+                flex: 1;
+                width: auto;
             }
 
             .view-counter {
@@ -544,13 +717,26 @@
                 left: auto;
                 transform: translateX(50%);
             }
+        }
 
-            .footer-credit {
-                position: static;
-                width: 100%;
-                padding-top: 20px;
-                text-align: center;
-                transform: none;
+        @media (max-width: 380px) {
+            .card {
+                padding-right: 15px;
+                padding-left: 15px;
+            }
+
+            .activity-box {
+                gap: 10px;
+                padding: 12px;
+            }
+
+            .activity-img {
+                width: 55px;
+                height: 55px;
+            }
+
+            .social-links {
+                gap: 10px;
             }
         }
     </style>
@@ -565,14 +751,12 @@
         </div>
     </div>
 
-    <!-- ARKA PLAN VİDEOSU -->
     <video id="bg-video" autoplay loop muted playsinline preload="auto">
-        <source src="./video.mp4" type="video/mp4">
+        <source src="video.mp4" type="video/mp4">
     </video>
 
-    <!-- MÜZİK -->
-    <audio id="bg-music" preload="auto" loop>
-        <source src="./music.mp3" type="audio/mpeg">
+    <audio id="bg-music" loop preload="auto">
+        <source src="music.mp3" type="audio/mpeg">
     </audio>
 
     <canvas id="snow-canvas"></canvas>
@@ -585,26 +769,23 @@
         <section class="card">
 
             <div class="profile-wrapper">
-                <img class="profile-img" src="./CX_logo.jpg"
-                    alt="CX_0x1 profil fotoğrafı">
+                <img id="avatar" class="profile-img" src="CX_logo.jpg" alt="CX_0x1 profile image">
                 <div id="status-dot" class="status-indicator"></div>
             </div>
 
-            <h1>CX_0x1</h1>
+            <h1 id="username">CX_0x1</h1>
 
             <div id="custom-status" class="custom-status">
-                Connecting...
+                SYSTEM ONLINE
             </div>
 
-            <div class="badge">
-                SYSTEM MASTER
-            </div>
+            <div class="badge">SYSTEM MASTER</div>
 
             <div class="skills-container">
                 <span class="skill-badge">HTML</span>
                 <span class="skill-badge">CSS</span>
-                <span class="skill-badge">REACT</span>
                 <span class="skill-badge">JAVASCRIPT</span>
+                <span class="skill-badge">REACT</span>
                 <span class="skill-badge">NODE.JS</span>
                 <span class="skill-badge">PYTHON</span>
                 <span class="skill-badge">C++</span>
@@ -612,9 +793,8 @@
             </div>
 
             <div id="activities-wrapper" class="activities-wrapper">
-                <div class="activity-box"
-                    style="justify-content:center;opacity:.4;">
-                    Connecting...
+                <div class="activity-box" style="justify-content:center; opacity:.45;">
+                    SYSTEM READY
                 </div>
             </div>
 
@@ -623,204 +803,83 @@
                     href="https://github.com/CX-0x1"
                     target="_blank"
                     rel="noopener noreferrer"
+                    title="GitHub"
                     aria-label="GitHub">
                     <i class="fab fa-github"></i>
                 </a>
 
                 <a class="social-btn"
-                    href="https://discord.com/users/959353098369921055"
+                    href="https://discord.com/users/1463597892462972969"
                     target="_blank"
                     rel="noopener noreferrer"
+                    title="Discord"
                     aria-label="Discord">
                     <i class="fab fa-discord"></i>
                 </a>
 
                 <a class="social-btn"
-                    href="https://www.instagram.com/codex_services.1545/"
+                    href="https://github.com/CX-0x1"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-
-                <a class="social-btn"
-                    href="mailto:codexservices1434@gmail.com"
-                    aria-label="E-posta">
-                    <i class="fas fa-envelope"></i>
-                </a>
-
-                <a class="social-btn"
-                    href="https://www.patreon.com/cw/CX_0x1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Patreon">
-                    <i class="fab fa-patreon"></i>
+                    title="Projects"
+                    aria-label="Projects">
+                    <i class="fas fa-code"></i>
                 </a>
             </div>
 
             <div class="volume-control">
-                <i id="play-icon"
-                    class="fas fa-play volume-icon"
-                    role="button"
-                    tabindex="0"
-                    aria-label="Müziği başlat"></i>
-
-                <i id="vol-icon"
-                    class="fas fa-volume-down volume-icon"
-                    role="button"
-                    tabindex="0"
-                    aria-label="Sesi kapat"></i>
-
+                <i id="vol-icon" class="fas fa-volume-mute volume-icon"></i>
                 <input id="vol-slider"
                     type="range"
                     min="0"
                     max="1"
-                    step=".01"
-                    value=".3"
-                    aria-label="Ses seviyesi">
+                    step="0.01"
+                    value="0.3"
+                    aria-label="Volume">
             </div>
 
             <div class="view-counter">
                 <i class="fas fa-eye"></i>
-                <span id="view-count">0</span>
+                <span id="view-count">...</span>
             </div>
 
         </section>
     </main>
 
-    <div class="footer-credit">
-        by BERAT
-    </div>
-
     <script>
-        const DISCORD_ID = "959353098369921055";
+        const DISCORD_ID = "1463597892462972969";
 
-        const video = document.getElementById("bg-video");
         const audio = document.getElementById("bg-music");
-        const playIcon = document.getElementById("play-icon");
-        const volumeIcon = document.getElementById("vol-icon");
         const slider = document.getElementById("vol-slider");
+        const volumeIcon = document.getElementById("vol-icon");
 
-        /* VİDEO */
+        const savedVolume = localStorage.getItem("cx_volume");
+        let lastVolume = 0.3;
 
-        video.muted = true;
-        video.loop = true;
-        video.playsInline = true;
+        if (savedVolume !== null) {
+            const volume = Number(savedVolume);
+            audio.volume = volume;
+            slider.value = volume;
 
-        function startVideo() {
-            video.play().catch(error => {
-                console.warn("Video başlatılamadı:", error);
-            });
+            if (volume > 0) {
+                lastVolume = volume;
+            }
+        } else {
+            audio.volume = 0.3;
+            slider.value = 0.3;
         }
 
-        window.addEventListener("load", startVideo);
-
-        document.addEventListener("pointerdown", startVideo, {
-            once: true
-        });
-
-        /* SES */
-
-        const savedVolume = Number(
-            localStorage.getItem("cx_volume") || ".3"
-        );
-
-        audio.volume = Math.max(0, Math.min(1, savedVolume));
-        slider.value = audio.volume;
-
-        let lastVolume = audio.volume || .3;
-        let audioContext = null;
-        let analyser = null;
-        let audioSource = null;
-
-        function updateVolumeIcon() {
-            if (audio.volume === 0) {
-                volumeIcon.className =
-                    "fas fa-volume-mute volume-icon";
-            } else if (audio.volume < .5) {
-                volumeIcon.className =
-                    "fas fa-volume-down volume-icon";
-            } else {
-                volumeIcon.className =
-                    "fas fa-volume-up volume-icon";
-            }
+        function updateVolumeIcon(volume) {
+            volumeIcon.className =
+                "fas volume-icon " +
+                (volume === 0
+                    ? "fa-volume-mute"
+                    : volume < 0.5
+                        ? "fa-volume-down"
+                        : "fa-volume-up");
         }
 
-        function updatePlayIcon() {
-            playIcon.className = audio.paused
-                ? "fas fa-play volume-icon"
-                : "fas fa-pause volume-icon";
-        }
-
-        function initVisualizer() {
-            if (audioContext) {
-                return;
-            }
-
-            try {
-                const AudioContext =
-                    window.AudioContext ||
-                    window.webkitAudioContext;
-
-                audioContext = new AudioContext();
-                analyser = audioContext.createAnalyser();
-                analyser.fftSize = 64;
-                analyser.smoothingTimeConstant = .92;
-
-                audioSource =
-                    audioContext.createMediaElementSource(audio);
-
-                audioSource.connect(analyser);
-                analyser.connect(audioContext.destination);
-
-                drawVisualizer();
-            } catch (error) {
-                console.warn("Visualizer başlatılamadı:", error);
-            }
-        }
-
-        async function playMusic() {
-            try {
-                if (audio.volume <= 0) {
-                    audio.volume = .3;
-                    slider.value = .3;
-                    lastVolume = .3;
-                }
-
-                await audio.play();
-
-                initVisualizer();
-
-                if (
-                    audioContext &&
-                    audioContext.state === "suspended"
-                ) {
-                    await audioContext.resume();
-                }
-
-                updatePlayIcon();
-            } catch (error) {
-                console.warn("Müzik başlatılamadı:", error);
-            }
-        }
-
-        function toggleMusic() {
-            if (audio.paused) {
-                playMusic();
-            } else {
-                audio.pause();
-                updatePlayIcon();
-            }
-        }
-
-        playIcon.addEventListener("click", toggleMusic);
-
-        playIcon.addEventListener("keydown", event => {
-            if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                toggleMusic();
-            }
-        });
+        updateVolumeIcon(audio.volume);
 
         volumeIcon.addEventListener("click", () => {
             if (audio.volume > 0) {
@@ -828,76 +887,52 @@
                 audio.volume = 0;
                 slider.value = 0;
             } else {
-                audio.volume = lastVolume || .3;
+                audio.volume = lastVolume || 0.3;
                 slider.value = audio.volume;
 
                 if (audio.paused) {
-                    playMusic();
+                    audio.play().catch(() => {});
                 }
             }
 
             localStorage.setItem("cx_volume", audio.volume);
-            updateVolumeIcon();
+            updateVolumeIcon(audio.volume);
         });
 
         slider.addEventListener("input", event => {
-            const value = Number(event.target.value);
+            const volume = Number(event.target.value);
 
-            audio.volume = value;
+            audio.volume = volume;
 
-            if (value > 0) {
-                lastVolume = value;
+            if (volume > 0) {
+                lastVolume = volume;
+
+                if (audio.paused) {
+                    audio.play().catch(() => {});
+                }
             }
 
-            localStorage.setItem("cx_volume", value);
-            updateVolumeIcon();
-
-            if (value > 0 && audio.paused) {
-                playMusic();
-            }
+            localStorage.setItem("cx_volume", volume);
+            updateVolumeIcon(volume);
         });
-
-        updateVolumeIcon();
-        updatePlayIcon();
-
-        /* LOADER */
-
-        window.addEventListener("load", () => {
-            const loader = document.getElementById("loader");
-            const content = document.querySelector(".loader-content");
-
-            content.innerHTML = `
-                <div class="click-text">CLICK TO ENTER</div>
-            `;
-
-            loader.addEventListener("click", () => {
-                loader.style.opacity = "0";
-                loader.style.visibility = "hidden";
-
-                startVideo();
-                playMusic();
-            }, { once: true });
-        });
-
-        /* KAR EFEKTİ */
 
         const snowCanvas = document.getElementById("snow-canvas");
         const snowContext = snowCanvas.getContext("2d");
-        let flakes = [];
 
         function resizeSnow() {
-            snowCanvas.width = innerWidth;
-            snowCanvas.height = innerHeight;
-
-            flakes = Array.from({
-                length: innerWidth < 768 ? 35 : 75
-            }, () => ({
-                x: Math.random() * snowCanvas.width,
-                y: Math.random() * snowCanvas.height,
-                size: Math.random() * 3 + 1,
-                speed: Math.random() * .7 + .3
-            }));
+            snowCanvas.width = window.innerWidth;
+            snowCanvas.height = window.innerHeight;
         }
+
+        resizeSnow();
+        window.addEventListener("resize", resizeSnow);
+
+        const flakes = Array.from({ length: 70 }, () => ({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            size: Math.random() * 3 + 1,
+            speed: Math.random() * 0.7 + 0.3
+        }));
 
         function drawSnow() {
             snowContext.clearRect(
@@ -912,7 +947,7 @@
             flakes.forEach(flake => {
                 flake.y += flake.speed;
 
-                if (flake.y > snowCanvas.height + 5) {
+                if (flake.y > snowCanvas.height) {
                     flake.y = -5;
                     flake.x = Math.random() * snowCanvas.width;
                 }
@@ -931,231 +966,174 @@
             requestAnimationFrame(drawSnow);
         }
 
-        window.addEventListener("resize", resizeSnow);
-        resizeSnow();
         drawSnow();
 
-        /* ÖZEL MOUSE */
+        async function fetchAvatar() {
+            try {
+                const response = await fetch(
+                    `https://api.lanyard.rest/v1/users/${DISCORD_ID}`
+                );
 
-        const dot = document.querySelector(".cursor-dot");
-        const outline = document.querySelector(".cursor-outline");
+                const result = await response.json();
 
-        const canUseCursor =
-            matchMedia("(hover: hover) and (pointer: fine)").matches;
-
-        let mouseX = innerWidth / 2;
-        let mouseY = innerHeight / 2;
-        let outlineX = mouseX;
-        let outlineY = mouseY;
-
-        if (canUseCursor) {
-            document.documentElement.classList.add(
-                "custom-cursor-active"
-            );
-
-            dot.style.left = `${mouseX}px`;
-            dot.style.top = `${mouseY}px`;
-            outline.style.left = `${outlineX}px`;
-            outline.style.top = `${outlineY}px`;
-
-            document.addEventListener("mousemove", event => {
-                mouseX = event.clientX;
-                mouseY = event.clientY;
-
-                dot.style.left = `${mouseX}px`;
-                dot.style.top = `${mouseY}px`;
-            }, { passive: true });
-
-            function animateCursor() {
-                outlineX += (mouseX - outlineX) * .15;
-                outlineY += (mouseY - outlineY) * .15;
-
-                outline.style.left = `${outlineX}px`;
-                outline.style.top = `${outlineY}px`;
-
-                requestAnimationFrame(animateCursor);
-            }
-
-            animateCursor();
-
-            document.addEventListener("mouseover", event => {
-                if (event.target.closest(
-                    "a, input, .activity-box, .profile-wrapper, .skill-badge, .volume-icon, .badge"
-                )) {
-                    document.body.classList.add("cursor-hover");
+                if (!result.success || !result.data.discord_user.avatar) {
+                    return;
                 }
-            });
 
-            document.addEventListener("mouseout", event => {
-                if (!event.relatedTarget ||
-                    !event.relatedTarget.closest?.(
-                        "a, input, .activity-box, .profile-wrapper, .skill-badge, .volume-icon, .badge"
-                    )) {
-                    document.body.classList.remove("cursor-hover");
-                }
-            });
-        }
+                const user = result.data.discord_user;
+                const extension = user.avatar.startsWith("a_")
+                    ? "gif"
+                    : "png";
 
-        /* KART EĞİMİ */
-
-        const card = document.querySelector(".card");
-
-        document.addEventListener("mousemove", () => {
-            if (innerWidth <= 768) {
-                return;
+                document.getElementById("avatar").src =
+                    `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${extension}?size=512`;
+            } catch (error) {
+                console.error("Avatar could not be loaded:", error);
             }
-
-            const rotateX =
-                ((mouseY - innerHeight / 2) /
-                    (innerHeight / 2)) * -8;
-
-            const rotateY =
-                ((mouseX - innerWidth / 2) /
-                    (innerWidth / 2)) * 8;
-
-            const rect = card.getBoundingClientRect();
-
-            card.style.transform =
-                `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-
-            card.style.setProperty(
-                "--glare-x",
-                `${((mouseX - rect.left) / rect.width) * 100}%`
-            );
-
-            card.style.setProperty(
-                "--glare-y",
-                `${((mouseY - rect.top) / rect.height) * 100}%`
-            );
-        });
-
-        /* GÖRÜNÜM SAYACI */
-
-        const viewCount = document.getElementById("view-count");
-        const views = Number(localStorage.getItem("cx_views") || "0") + 1;
-
-        localStorage.setItem("cx_views", views);
-        viewCount.textContent = views;
-
-        /* DISCORD LANYARD */
-
-        const avatar = document.querySelector(".profile-img");
-        const statusDot = document.getElementById("status-dot");
-        const customStatus = document.getElementById("custom-status");
-        const activitiesWrapper =
-            document.getElementById("activities-wrapper");
-
-        function escapeHtml(value) {
-            return String(value ?? "")
-                .replaceAll("&", "&amp;")
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;")
-                .replaceAll('"', "&quot;")
-                .replaceAll("'", "&#039;");
         }
 
         function getActivityImage(activity) {
-            if (
-                !activity.assets ||
-                !activity.assets.large_image
-            ) {
+            if (!activity.assets || !activity.assets.large_image) {
                 return "https://cdn.discordapp.com/embed/avatars/0.png";
             }
 
             const image = activity.assets.large_image;
 
             if (image.startsWith("mp:external")) {
-                const match = image.match(/https\/(.+)/);
+                const externalUrl = image.match(
+                    /mp:external\/.*\/https\/(.*)/
+                );
 
-                return match
-                    ? `https://${match[1]}`
-                    : "https://cdn.discordapp.com/embed/avatars/0.png";
+                if (externalUrl) {
+                    return `https://${externalUrl[1]}`;
+                }
             }
 
-            if (!activity.application_id) {
-                return "https://cdn.discordapp.com/embed/avatars/0.png";
+            if (activity.application_id) {
+                return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${image}.png`;
             }
 
-            return `https://cdn.discordapp.com/app-assets/${
-                activity.application_id
-            }/${image}.png`;
+            return "https://cdn.discordapp.com/embed/avatars/0.png";
         }
 
-        function updateDiscord(data) {
+        function updatePresence(data) {
             if (!data) {
                 return;
             }
 
-            if (data.discord_user?.avatar) {
-                const extension =
-                    data.discord_user.avatar.startsWith("a_")
-                        ? "gif"
-                        : "png";
+            const user = data.discord_user;
 
-                avatar.src =
-                    `https://cdn.discordapp.com/avatars/` +
-                    `${data.discord_user.id}/` +
-                    `${data.discord_user.avatar}.${extension}?size=512`;
+            if (user && user.avatar) {
+                const extension = user.avatar.startsWith("a_")
+                    ? "gif"
+                    : "png";
+
+                document.getElementById("avatar").src =
+                    `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${extension}?size=512`;
             }
 
-            const status = data.discord_status || "offline";
+            const statusDot = document.getElementById("status-dot");
             statusDot.className =
-                `status-indicator status-${status}`;
+                `status-indicator status-${data.discord_status || "offline"}`;
 
-            const activities = Array.isArray(data.activities)
-                ? data.activities
-                : [];
+            const customStatus = data.activities?.find(
+                activity => activity.type === 4
+            );
 
-            const custom = activities.find(activity => activity.type === 4);
+            const statusElement = document.getElementById("custom-status");
 
-            customStatus.textContent =
-                custom?.state || "Available";
+            if (customStatus?.state) {
+                let statusHTML = "";
 
-            let html = "";
+                if (customStatus.emoji) {
+                    if (customStatus.emoji.id) {
+                        statusHTML +=
+                            `<img src="https://cdn.discordapp.com/emojis/${customStatus.emoji.id}.png"
+                            alt=""
+                            style="width:16px;height:16px;vertical-align:middle;margin-right:5px;">`;
+                    } else if (customStatus.emoji.name) {
+                        statusHTML += `${customStatus.emoji.name} `;
+                    }
+                }
 
-            activities
-                .filter(activity =>
-                    activity.type !== 4 &&
-                    activity.id !== "spotify:1"
-                )
-                .forEach(activity => {
-                    html += `
-                        <div class="activity-box">
-                            <img
-                                class="activity-img"
-                                src="${getActivityImage(activity)}"
-                                alt="Aktivite görseli"
-                            >
+                statusHTML += customStatus.state;
+                statusElement.innerHTML = statusHTML;
+            } else {
+                statusElement.textContent = "SYSTEM ONLINE";
+            }
 
-                            <div class="activity-info">
-                                <div class="activity-header">
-                                    Playing Now
-                                </div>
+            let activitiesHTML = "";
 
-                                <div class="activity-name">
-                                    ${escapeHtml(activity.name)}
-                                </div>
+            if (data.listening_to_spotify && data.spotify) {
+                const spotify = data.spotify;
 
-                                <div class="activity-details">
-                                    ${escapeHtml(activity.state || "")}
-                                </div>
+                activitiesHTML += `
+                    <div class="activity-box">
+                        <img class="activity-img"
+                            src="${spotify.album_art_url}"
+                            alt="Spotify album art">
+
+                        <div class="activity-info">
+                            <div class="activity-header">
+                                Listening to Spotify
+                            </div>
+
+                            <div class="activity-name">
+                                ${spotify.song}
+                            </div>
+
+                            <div class="activity-details">
+                                ${spotify.artist}
                             </div>
                         </div>
-                    `;
-                });
 
-            activitiesWrapper.innerHTML = html || `
-                <div class="activity-box"
-                    style="justify-content:center;opacity:.4;">
-                    Inactive
-                </div>
-            `;
+                        <div class="bars">
+                            <div class="bar"></div>
+                            <div class="bar" style="animation-delay:.1s"></div>
+                            <div class="bar" style="animation-delay:.2s"></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const activities = (data.activities || []).filter(activity =>
+                activity.type !== 4 &&
+                activity.id !== "spotify:1"
+            );
+
+            activities.forEach(activity => {
+                activitiesHTML += `
+                    <div class="activity-box">
+                        <img class="activity-img"
+                            src="${getActivityImage(activity)}"
+                            alt="Activity image">
+
+                        <div class="activity-info">
+                            <div class="activity-header">
+                                Active Application
+                            </div>
+
+                            <div class="activity-name">
+                                ${activity.name || "Unknown Application"}
+                            </div>
+
+                            <div class="activity-details">
+                                ${activity.state || activity.details || ""}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById("activities-wrapper").innerHTML =
+                activitiesHTML ||
+                `<div class="activity-box" style="justify-content:center;opacity:.45;">
+                    NO ACTIVE ACTIVITY
+                </div>`;
         }
 
         function connectLanyard() {
-            const socket = new WebSocket(
-                "wss://api.lanyard.rest/socket"
-            );
+            const socket = new WebSocket("wss://api.lanyard.rest/socket");
 
             socket.addEventListener("open", () => {
                 socket.send(JSON.stringify({
@@ -1167,17 +1145,13 @@
             });
 
             socket.addEventListener("message", event => {
-                try {
-                    const packet = JSON.parse(event.data);
+                const message = JSON.parse(event.data);
 
-                    if (
-                        packet.t === "INIT_STATE" ||
-                        packet.t === "PRESENCE_UPDATE"
-                    ) {
-                        updateDiscord(packet.d);
-                    }
-                } catch (error) {
-                    console.warn("Discord verisi okunamadı:", error);
+                if (
+                    message.t === "INIT_STATE" ||
+                    message.t === "PRESENCE_UPDATE"
+                ) {
+                    updatePresence(message.d);
                 }
             });
 
@@ -1190,81 +1164,237 @@
             });
         }
 
-        connectLanyard();
+        async function initializeCounter() {
+            const counter = document.getElementById("view-count");
 
-        /* SES GÖRSELLEŞTİRİCİSİ */
+            try {
+                const response = await fetch(
+                    "https://firebasedevapi.vercel.app/api/increment",
+                    {
+                        method: "POST"
+                    }
+                );
 
-        const visualizer =
-            document.getElementById("audio-visualizer");
-
-        const visualizerContext = visualizer.getContext("2d");
-
-        function resizeVisualizer() {
-            visualizer.width = visualizer.offsetWidth;
-            visualizer.height = visualizer.offsetHeight;
+                const result = await response.json();
+                counter.textContent = result.count ?? "N/A";
+            } catch (error) {
+                counter.textContent = "N/A";
+            }
         }
 
-        function drawVisualizer() {
-            if (!analyser) {
+        fetchAvatar();
+        connectLanyard();
+        initializeCounter();
+
+        const dot = document.querySelector(".cursor-dot");
+        const outline = document.querySelector(".cursor-outline");
+
+        let mouseX = 0;
+        let mouseY = 0;
+        let dotX = 0;
+        let dotY = 0;
+        let outlineX = 0;
+        let outlineY = 0;
+
+        document.addEventListener("mousemove", event => {
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+        });
+
+        function animateCursor() {
+            dotX += (mouseX - dotX) * 0.2;
+            dotY += (mouseY - dotY) * 0.2;
+
+            outlineX += (mouseX - outlineX) * 0.1;
+            outlineY += (mouseY - outlineY) * 0.1;
+
+            dot.style.left = `${dotX}px`;
+            dot.style.top = `${dotY}px`;
+
+            outline.style.left = `${outlineX}px`;
+            outline.style.top = `${outlineY}px`;
+
+            requestAnimationFrame(animateCursor);
+        }
+
+        animateCursor();
+
+        document
+            .querySelectorAll("a, input, .social-btn, .profile-wrapper, .activity-box, .skill-badge, .badge, h1, .volume-icon")
+            .forEach(element => {
+                element.addEventListener("mouseenter", () => {
+                    document.body.classList.add("cursor-hover");
+                });
+
+                element.addEventListener("mouseleave", () => {
+                    document.body.classList.remove("cursor-hover");
+                });
+            });
+
+        const card = document.querySelector(".card");
+
+        let cardRotateX = 0;
+        let cardRotateY = 0;
+        let mouseInside = false;
+
+        document.addEventListener("mouseenter", () => {
+            mouseInside = true;
+        });
+
+        document.addEventListener("mouseleave", () => {
+            mouseInside = false;
+        });
+
+        function animateCard() {
+            if (window.innerWidth <= 768) {
+                card.style.transform = "none";
+                requestAnimationFrame(animateCard);
                 return;
             }
 
-            const length = analyser.frequencyBinCount;
-            const data = new Uint8Array(length);
+            let targetX = 0;
+            let targetY = 0;
+
+            if (mouseInside) {
+                targetX =
+                    ((mouseY - window.innerHeight / 2) /
+                        (window.innerHeight / 2)) *
+                    -10;
+
+                targetY =
+                    ((mouseX - window.innerWidth / 2) /
+                        (window.innerWidth / 2)) *
+                    10;
+
+                const rect = card.getBoundingClientRect();
+
+                const glareX =
+                    ((mouseX - rect.left) / rect.width) * 100;
+
+                const glareY =
+                    ((mouseY - rect.top) / rect.height) * 100;
+
+                card.style.setProperty("--glare-x", `${glareX}%`);
+                card.style.setProperty("--glare-y", `${glareY}%`);
+            }
+
+            cardRotateX += (targetX - cardRotateX) * 0.1;
+            cardRotateY += (targetY - cardRotateY) * 0.1;
+
+            card.style.transform =
+                `perspective(1000px) rotateX(${cardRotateX}deg) rotateY(${cardRotateY}deg)`;
+
+            requestAnimationFrame(animateCard);
+        }
+
+        animateCard();
+
+        let audioContext;
+        let analyser;
+        let audioSource;
+
+        const visualizerCanvas =
+            document.getElementById("audio-visualizer");
+
+        const visualizerContext =
+            visualizerCanvas.getContext("2d");
+
+        function resizeVisualizer() {
+            visualizerCanvas.width = window.innerWidth;
+            visualizerCanvas.height =
+                window.innerHeight * 0.25;
+        }
+
+        resizeVisualizer();
+        window.addEventListener("resize", resizeVisualizer);
+
+        function initializeVisualizer() {
+            if (audioContext) {
+                return;
+            }
+
+            try {
+                const AudioContext =
+                    window.AudioContext ||
+                    window.webkitAudioContext;
+
+                audioContext = new AudioContext();
+
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 64;
+                analyser.smoothingTimeConstant = 0.92;
+
+                audioSource =
+                    audioContext.createMediaElementSource(audio);
+
+                audioSource.connect(analyser);
+                analyser.connect(audioContext.destination);
+
+                drawVisualizer();
+            } catch (error) {
+                console.error("Visualizer error:", error);
+            }
+        }
+
+        function drawVisualizer() {
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
 
             function draw() {
                 requestAnimationFrame(draw);
 
-                analyser.getByteFrequencyData(data);
+                analyser.getByteFrequencyData(dataArray);
 
                 visualizerContext.clearRect(
                     0,
                     0,
-                    visualizer.width,
-                    visualizer.height
+                    visualizerCanvas.width,
+                    visualizerCanvas.height
                 );
 
-                const usefulBins = Math.floor(length * .7);
-                const halfWidth = visualizer.width / 2;
-                const barWidth = halfWidth / usefulBins;
+                const usefulBins =
+                    Math.floor(bufferLength * 0.7);
 
-                for (let i = 0; i < usefulBins; i++) {
+                const halfWidth =
+                    visualizerCanvas.width / 2;
+
+                const barWidth =
+                    halfWidth / usefulBins;
+
+                for (let index = 0; index < usefulBins; index++) {
                     const height =
-                        data[i] / 255 *
-                        visualizer.height *
-                        .8;
+                        (dataArray[index] / 255) *
+                        visualizerCanvas.height *
+                        0.8;
 
                     const gradient =
                         visualizerContext.createLinearGradient(
                             0,
-                            visualizer.height - height,
+                            visualizerCanvas.height - height,
                             0,
-                            visualizer.height
+                            visualizerCanvas.height
                         );
 
                     gradient.addColorStop(0, "#d4af37");
-                    gradient.addColorStop(
-                        1,
-                        "rgba(212,175,55,0)"
-                    );
+                    gradient.addColorStop(1, "rgba(212,175,55,0)");
 
                     visualizerContext.fillStyle = gradient;
 
-                    const left = i * barWidth;
-                    const right =
-                        visualizer.width -
-                        ((i + 1) * barWidth);
+                    const leftX = index * barWidth;
+                    const rightX =
+                        visualizerCanvas.width -
+                        (index + 1) * barWidth;
 
                     visualizerContext.fillRect(
-                        left,
-                        visualizer.height - height,
+                        leftX,
+                        visualizerCanvas.height - height,
                         barWidth - 1,
                         height
                     );
 
                     visualizerContext.fillRect(
-                        right,
-                        visualizer.height - height,
+                        rightX,
+                        visualizerCanvas.height - height,
                         barWidth - 1,
                         height
                     );
@@ -1274,8 +1404,31 @@
             draw();
         }
 
-        window.addEventListener("resize", resizeVisualizer);
-        resizeVisualizer();
+        window.addEventListener("load", () => {
+            const loader = document.getElementById("loader");
+            const loaderContent =
+                document.querySelector(".loader-content");
+
+            loaderContent.innerHTML =
+                `<div class="click-text">CLICK TO ENTER</div>`;
+
+            loader.addEventListener("click", () => {
+                loader.style.opacity = "0";
+                loader.style.visibility = "hidden";
+
+                const video = document.getElementById("bg-video");
+
+                if (video.paused) {
+                    video.play().catch(() => {});
+                }
+
+                initializeVisualizer();
+
+                if (audio.volume > 0) {
+                    audio.play().catch(() => {});
+                }
+            }, { once: true });
+        });
     </script>
 
 </body>
