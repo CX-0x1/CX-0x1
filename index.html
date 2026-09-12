@@ -1177,28 +1177,28 @@
         }
 
         function getActivityImage(activity) {
-            if (!activity.assets ||
-                !activity.assets.large_image) {
-                return "https://cdn.discordapp.com/embed/avatars/0.png";
+            if (!activity.assets || !activity.assets.large_image) {
+                return "https://discordapp.com";
             }
 
             const image = activity.assets.large_image;
 
             if (image.startsWith("mp:external")) {
-                const match = image.match(
-                    /mp:external\/.*\/https\/(.*)/
-                );
-
+                const match = image.match(/mp:external\/.*\/https\/(.*)/);
                 if (match) {
                     return "https://" + match[1];
                 }
             }
-
-            if (activity.application_id) {
-                return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${image}.png`;
+            
+            if (image.startsWith("https://")) {
+                return image;
             }
 
-            return "https://cdn.discordapp.com/embed/avatars/0.png";
+            if (activity.application_id) {
+                return `https://discordapp.com{activity.application_id}/${image}.png`;
+            }
+
+            return "https://discordapp.com";
         }
 
         function updatePresence(data) {
