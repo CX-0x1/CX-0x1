@@ -210,9 +210,9 @@
 
         .card {
             position: relative;
-            z-index: 100; /* Katmanı en üste zorladık */
-            width: 440px;
-            max-width: 90%;
+            z-index: 100;
+            width: 540px; /* Kartı genişleterek rozetleri yana yaydık */
+            max-width: 95%;
             max-height: 96vh;
             margin: 20px auto;
             padding: 2.5rem 2.5rem 5.8rem;
@@ -224,7 +224,6 @@
             box-shadow: 0 0 30px rgba(212, 175, 55, .1);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            /* transform-style kaldırıldı çünkü 3D derinliği katmanları bozuyordu */
             transition: transform .1s ease-out, box-shadow .4s ease;
         }
 
@@ -387,15 +386,15 @@
             transform: translateZ(35px);
         }
 
-        .skill-badge {
+             .skill-badge {
             display: inline-block;
-            padding: 5px 12px;
+            padding: 4px 8px; /* Boşluklar azaltıldı */
             color: #c0c0c0;
             background: rgba(192, 192, 192, .08);
             border: 1px solid rgba(192, 192, 192, .2);
             border-radius: 8px;
             box-shadow: 0 3px 0 rgba(192, 192, 192, .15);
-            font-size: .7rem;
+            font-size: .65rem; /* Yazı boyutu hafif küçültüldü */
             font-weight: 600;
             letter-spacing: .5px;
             transition: all .3s ease;
