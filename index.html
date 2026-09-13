@@ -409,58 +409,84 @@
         }
 
         /* AKTİVİTE KUTUSU ANA ALANI */
-        /* AKILLI HAREKETLİ AKTİVİTE ALANI */
+        /* 7/24 SİBER AKTİVİTE SLIDER ALANI */
         .activities-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            transform: translateZ(20px);
-            
-            /* En fazla 2 pencere sığacak yükseklik sınırı */
-            max-height: 245px; 
-            overflow-y: auto;
-            padding: 5px 2px;
-            
-            /* Diğer şeylerin üstüne binmesin diye kutu sınırında gizlenme maskesi */
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 92%, transparent 100%);
-            mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 92%, transparent 100%);
-            
-            /* Kaydırma çubuğunu tamamen gizleme (Firefox için) */
-            scrollbar-width: none; 
-        }
-
-        /* Kaydırma çubuğunu tamamen gizleme (Chrome, Safari ve Edge için) */
-        .activities-wrapper::-webkit-scrollbar {
-            display: none; 
-            width: 0 !important;
-            background: transparent;
-        }
-
-        .activity-box {
+            position: relative;
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 16px;
-            text-align: left;
-            background: rgba(255, 255, 255, .03);
-            border: 1px solid rgba(255, 255, 255, .05);
-            border-radius: 18px;
-            box-shadow: 0 4px 0 rgba(0, 0, 0, .3);
-            transition: all .3s ease;
+            justify-content: center;
+            width: 100%;
+            min-height: 120px;
+            margin: 20px 0 10px;
+            transform: translateZ(20px);
+            perspective: 1000px; /* 3D havada uçma efekti için gerekli */
         }
 
+        /* ANA AKTİVİTE KUTUSU */
+        .activity-box {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            width: 100%;
+            padding: 18px;
+            text-align: left;
+            background: rgba(8, 8, 8, .85);
+            border: 1px solid rgba(212, 175, 55, .15);
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .6);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            
+            /* İlk giriş pozisyonu: Soldan derinlik ve eğim alarak bekler */
+            transform: translate3d(-100px, 0, -150px) rotateY(30deg);
+            transition: opacity .6s cubic-bezier(0.25, 1, 0.5, 1), 
+                        visibility .6s cubic-bezier(0.25, 1, 0.5, 1), 
+                        transform .7s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        border-color .4s ease,
+                        box-shadow .4s ease;
+            cursor: pointer !important; /* Karta tıklanabilir hissi verir */
+        }
+
+        /* 🌟 İSTEDİĞİNİZ EFEKT: ÜSTÜNE GELİNCE ETRAFI SARI ŞEKİLDE PARLAYIP BÜYÜME */
         .activity-box:hover {
-            background: rgba(255, 255, 255, .06);
-            border-color: rgba(212, 175, 55, .3);
-            transform: scale(1.02) translateZ(40px);
+            background: rgba(12, 12, 12, .95);
+            border-color: var(--gold); /* Kenarlık tamamen altın sarısı olur */
+            box-shadow: 0 0 25px rgba(212, 175, 55, .42), 0 0 45px rgba(212, 175, 55, .15); /* Çift katmanlı neon parlaması */
+            transform: scale(1.05) translate3d(0, -4px, 40px) !important; /* Öne doğru fırlayarak büyüme */
+        }
+
+        /* MERKEZE OTURAN ETKİN KART */
+        .activity-box.active {
+            position: relative;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: scale(1) translate3d(0, 0, 0) rotateY(0deg);
+        }
+
+        /* 🌟 İSTEDİĞİNİZ EFEKT: SAĞ TARAFA HAVADAN GİDİYORMUŞ GİBİ UÇARAK GİZLENME */
+        .activity-box.exit {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translate3d(120px, -15px, 80px) rotateY(-35deg) scale(0.92); /* Sağa doğru yukarı kavisle uçar */
         }
 
         .activity-img {
             flex-shrink: 0;
-            width: 65px;
-            height: 65px;
+            width: 62px;
+            height: 62px;
             object-fit: cover;
             border-radius: 14px;
+            border: 1px solid rgba(212, 175, 55, .2);
+            transition: transform .4s ease;
+        }
+
+        .activity-box:hover .activity-img {
+            transform: scale(1.08) rotate(3deg);
+            border-color: var(--gold);
         }
 
         .activity-info {
@@ -474,11 +500,12 @@
 
         .activity-header {
             overflow: hidden;
-            color: #999;
+            color: var(--gold);
             font-size: .75rem;
-            font-weight: 600;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px rgba(212, 175, 55, .4);
         }
 
         .activity-name {
@@ -492,30 +519,51 @@
 
         .activity-details {
             overflow: hidden;
-            color: #ccc;
+            color: #bbb;
             font-size: .85rem;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
-        /* ALTIN SARISI CANLI SÜRE SAYACI */
-        .activity-time {
+        /* LÜKS OK BUTONLARI (DIŞ CEPHEDE DURUR) */
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%) translateZ(60px);
+            width: 36px;
+            height: 36px;
+            background: rgba(5, 5, 5, .85);
+            border: 1px solid rgba(212, 175, 55, .3);
+            border-radius: 50%;
+            color: var(--gold);
             display: flex;
             align-items: center;
-            gap: 6px;
-            color: var(--gold); /* Sitenizin altın sarısı rengi */
-            font-size: .85rem;
-            font-weight: 600;
-            margin-top: 4px;
-            filter: drop-shadow(0 0 4px rgba(212, 175, 55, .4)); /* Hafif altın ışıltısı */
+            justify-content: center;
+            font-size: .9rem;
+            font-weight: 800;
+            transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 50;
+            cursor: pointer !important;
         }
 
-        .activity-time svg {
-            width: 14px;
-            height: 14px;
-            fill: currentColor;
+        .slider-btn:hover {
+            background: var(--gold);
+            color: #000;
+            box-shadow: 0 0 15px var(--gold);
+            border-color: var(--gold);
+            transform: translateY(-50%) translateZ(80px) scale(1.1);
         }
 
+        .slider-btn.prev { left: -44px; }
+        .slider-btn.next { right: -44px; }
+
+        /* SINIRSIZ DÖNGÜ İÇİN ÇOKLU AKTİVİTE VARSA OKLAR BELİRİR */
+        .activities-wrapper.has-multiple .slider-btn {
+            opacity: 1;
+            visibility: visible;
+        }
         
         /* SOCIAL */
 
@@ -888,13 +936,13 @@
                 <span class="skill-badge">HASKELL</span>
             </div>
 
-            <div id="activities-wrapper"
-                class="activities-wrapper">
-
-                <div class="activity-box"
-                    style="justify-content:center;opacity:.35;">
-                    INACTIVE
+            <!-- KARTIN GENİŞLİĞİNİ BOZMAYAN SİBER SLIDER -->
+            <div id="activities-wrapper" class="activities-wrapper">
+                <button class="slider-btn prev" id="slider-prev" aria-label="Önceki Slayt">&#10094;</button>
+                <div id="activities-content" style="width:100%;">
+                    <div class="activity-box" style="justify-content:center;opacity:.35;">INACTIVE</div>
                 </div>
+                <button class="slider-btn next" id="slider-next" aria-label="Sonraki Slayt">&#10095;</button>
             </div>
 
             <div class="social-links">
@@ -1240,6 +1288,8 @@
             return "https://cdn.discordapp.com/embed/avatars/0.png";
         }
 
+        let currentSlideIndex = 0;
+
         function updatePresence(data) {
             if (!data) return;
 
@@ -1252,13 +1302,13 @@
             document.getElementById("custom-status").textContent =
                 customStatus && customStatus.state ? customStatus.state : "SYSTEM ONLINE";
 
-            let html = "";
+            let slides = [];
 
-            // SPOTIFY SİSTEMİ
+            // SPOTIFY KARTI
             if (data.listening_to_spotify && data.spotify) {
                 const spotify = data.spotify;
-                html += `
-                    <div class="activity-box">
+                slides.push(`
+                    <div class="activity-box" onclick="handleSliderNext()">
                         <img src="${escapeHTML(spotify.album_art_url)}" class="activity-img" alt="Spotify">
                         <div class="activity-info">
                             <div class="activity-header">SPOTIFY DİNLİYOR</div>
@@ -1267,56 +1317,83 @@
                         </div>
                         <div class="bars"><div class="bar"></div><div class="bar" style="animation-delay:.1s"></div><div class="bar" style="animation-delay:.2s"></div></div>
                     </div>
-                `;
+                `);
             }
 
-            // DİĞER UYGULAMALAR (VS CODE, PYTHON, OYUNLAR VB.)
+            // OYUNLAR VE VS CODE KARTLARI
             activities
                 .filter(activity => activity.type !== 4 && activity.id !== "spotify:1")
                 .forEach(activity => {
-                    let timeHTML = "";
-                    if (activity.timestamps && activity.timestamps.start) {
-                        const startTime = activity.timestamps.start;
-                        const updateTimer = () => {
-                            const now = Date.now();
-                            const diff = now - startTime;
-                            const hrs = Math.floor(diff / 3600000);
-                            const mins = Math.floor((diff % 3600000) / 60000);
-                            const secs = Math.floor((diff % 60000) / 1000);
-                            
-                            const timeStr = `${hrs > 0 ? hrs + ':' : ''}${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-                            const timerElem = document.getElementById(`timer-${activity.id || 'game'}`);
-                            if (timerElem) timerElem.textContent = timeStr;
-                        };
-                        
-                        // Sayaç animasyonunu tetikle ve her saniye güncelleme döngüsüne al
-                        setTimeout(() => { setInterval(updateTimer, 1000); }, 100);
-
-                        timeHTML = `
-                            <div class="activity-time">
-                                <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>
-                                <span id="timer-${activity.id || 'game'}">00:00</span>
-                            </div>
-                        `;
-                    }
-
-                    html += `
-                        <div class="activity-box">
+                    slides.push(`
+                        <div class="activity-box" onclick="handleSliderNext()">
                             <img src="${getActivityImage(activity)}" class="activity-img" alt="Etkinlik">
                             <div class="activity-info">
                                 <div class="activity-header">OYNUYOR</div>
                                 <div class="activity-name">${escapeHTML(activity.name)}</div>
-                                <div class="activity-details">${escapeHTML(activity.details || "")}</div>
-                                ${activity.state ? `<div class="activity-details" style="color:#888;">${escapeHTML(activity.state)}</div>` : ""}
-                                ${timeHTML}
+                                <div class="activity-details">${escapeHTML(activity.details || activity.state || "AKTİF DURUMDA")}</div>
                             </div>
                         </div>
-                    `;
+                    `);
                 });
 
-            document.getElementById("activities-wrapper").innerHTML = html || `
-                <div class="activity-box" style="justify-content:center;opacity:.35;">INACTIVE</div>
-            `;
+            const wrapper = document.getElementById("activities-wrapper");
+            const content = document.getElementById("activities-content");
+
+            if (slides.length === 0) {
+                wrapper.classList.remove("has-multiple");
+                content.innerHTML = `<div class="activity-box active" style="justify-content:center;opacity:.35;position:relative;pointer-events:none;">INACTIVE</div>`;
+                return;
+            }
+
+            content.innerHTML = slides.join("");
+            const boxElements = content.querySelectorAll(".activity-box");
+
+            // SINIRSIZ DÖNGÜ VE KONTROLLER
+            if (slides.length > 1) {
+                wrapper.classList.add("has-multiple");
+                if (currentSlideIndex >= slides.length) currentSlideIndex = 0;
+                boxElements[currentSlideIndex].classList.add("active");
+            } else {
+                wrapper.classList.remove("has-multiple");
+                currentSlideIndex = 0;
+                boxElements[0].classList.add("active");
+            }
+
+            // KÜRESEL SAĞA GEÇİŞ FONKSİYONU (TIKLAMA İÇİN DE GEÇERLİ)
+            window.handleSliderNext = () => {
+                const boxes = document.getElementById("activities-content").querySelectorAll(".activity-box");
+                if (boxes.length <= 1) return;
+                
+                boxes[currentSlideIndex].classList.remove("active");
+                boxes[currentSlideIndex].classList.add("exit"); // Havaya uçma efekti
+                
+                const oldIndex = currentSlideIndex;
+                currentSlideIndex = (currentSlideIndex + 1) % boxes.length; // Sınırsız döngü formülü
+                
+                setTimeout(() => {
+                    boxes[oldIndex].classList.remove("exit");
+                    boxes[currentSlideIndex].classList.add("active");
+                }, 220);
+            };
+
+            // OK BUTONLARI TETİKLEYİCİLERİ
+            if (!window.sliderEventsBound) {
+                document.getElementById("slider-next").onclick = () => {
+                    window.handleSliderNext();
+                };
+
+                document.getElementById("slider-prev").onclick = () => {
+                    const boxes = document.getElementById("activities-content").querySelectorAll(".activity-box");
+                    if (boxes.length <= 1) return;
+                    
+                    boxes[currentSlideIndex].classList.remove("active");
+                    
+                    currentSlideIndex = (currentSlideIndex - 1 + boxes.length) % boxes.length;
+                    boxes[currentSlideIndex].classList.add("active");
+                };
+                
+                window.sliderEventsBound = true;
+            }
         }
 
         function connectLanyard() {
