@@ -409,8 +409,7 @@
             transform: translateY(-2px) translateZ(35px);
         }
 
-        /* ACTIVITIES */
-
+        /* AKTİVİTE KUTUSU ANA ALANI */
         .activities-wrapper {
             display: flex;
             flex-direction: column;
@@ -446,6 +445,9 @@
         }
 
         .activity-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
             flex: 1;
             min-width: 0;
             overflow: hidden;
@@ -453,31 +455,49 @@
 
         .activity-header {
             overflow: hidden;
-            color: var(--gold);
-            font-size: .65rem;
-            font-weight: 800;
+            color: #999;
+            font-size: .75rem;
+            font-weight: 600;
             text-overflow: ellipsis;
-            text-transform: uppercase;
             white-space: nowrap;
         }
 
         .activity-name {
             overflow: hidden;
             color: #fff;
-            font-size: .95rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 700;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
         .activity-details {
             overflow: hidden;
-            color: #999;
-            font-size: .8rem;
+            color: #ccc;
+            font-size: .85rem;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
+        /* ALTIN SARISI CANLI SÜRE SAYACI */
+        .activity-time {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--gold); /* Sitenizin altın sarısı rengi */
+            font-size: .85rem;
+            font-weight: 600;
+            margin-top: 4px;
+            filter: drop-shadow(0 0 4px rgba(212, 175, 55, .4)); /* Hafif altın ışıltısı */
+        }
+
+        .activity-time svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        
         /* SOCIAL */
 
         .social-links {
@@ -1202,102 +1222,81 @@
         }
 
         function updatePresence(data) {
-            if (!data) {
-                return;
-            }
+            if (!data) return;
 
             document.getElementById("status-dot").className =
-                "status-indicator status-" +
-                (data.discord_status || "offline");
+                "status-indicator status-" + (data.discord_status || "offline");
 
-            const activities = Array.isArray(data.activities)
-                ? data.activities
-                : [];
-
-            const customStatus = activities.find(
-                activity => activity.type === 4
-            );
+            const activities = Array.isArray(data.activities) ? data.activities : [];
+            const customStatus = activities.find(activity => activity.type === 4);
 
             document.getElementById("custom-status").textContent =
-                customStatus && customStatus.state
-                    ? customStatus.state
-                    : "SYSTEM ONLINE";
+                customStatus && customStatus.state ? customStatus.state : "SYSTEM ONLINE";
 
             let html = "";
 
-            if (data.listening_to_spotify &&
-                data.spotify) {
+            // SPOTIFY SİSTEMİ
+            if (data.listening_to_spotify && data.spotify) {
                 const spotify = data.spotify;
-
                 html += `
                     <div class="activity-box">
-                        <img src="${escapeHTML(spotify.album_art_url)}"
-                            class="activity-img"
-                            alt="Spotify album art">
-
+                        <img src="${escapeHTML(spotify.album_art_url)}" class="activity-img" alt="Spotify">
                         <div class="activity-info">
-                            <div class="activity-header">
-                                Listening to Spotify
-                            </div>
-
-                            <div class="activity-name">
-                                ${escapeHTML(spotify.song)}
-                            </div>
-
-                            <div class="activity-details">
-                                ${escapeHTML(spotify.artist)}
-                            </div>
+                            <div class="activity-header">SPOTIFY DİNLİYOR</div>
+                            <div class="activity-name">${escapeHTML(spotify.song)}</div>
+                            <div class="activity-details">${escapeHTML(spotify.artist)}</div>
                         </div>
-
-                        <div class="bars">
-                            <div class="bar"></div>
-                            <div class="bar" style="animation-delay:.1s"></div>
-                            <div class="bar" style="animation-delay:.2s"></div>
-                        </div>
+                        <div class="bars"><div class="bar"></div><div class="bar" style="animation-delay:.1s"></div><div class="bar" style="animation-delay:.2s"></div></div>
                     </div>
                 `;
             }
 
+            // DİĞER UYGULAMALAR (VS CODE, PYTHON, OYUNLAR VB.)
             activities
-                .filter(activity =>
-                    activity.type !== 4 &&
-                    activity.id !== "spotify:1"
-                )
+                .filter(activity => activity.type !== 4 && activity.id !== "spotify:1")
                 .forEach(activity => {
+                    let timeHTML = "";
+                    if (activity.timestamps && activity.timestamps.start) {
+                        const startTime = activity.timestamps.start;
+                        const updateTimer = () => {
+                            const now = Date.now();
+                            const diff = now - startTime;
+                            const hrs = Math.floor(diff / 3600000);
+                            const mins = Math.floor((diff % 3600000) / 60000);
+                            const secs = Math.floor((diff % 60000) / 1000);
+                            
+                            const timeStr = `${hrs > 0 ? hrs + ':' : ''}${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+                            const timerElem = document.getElementById(`timer-${activity.id || 'game'}`);
+                            if (timerElem) timerElem.textContent = timeStr;
+                        };
+                        
+                        // Sayaç animasyonunu tetikle ve her saniye güncelleme döngüsüne al
+                        setTimeout(() => { setInterval(updateTimer, 1000); }, 100);
+
+                        timeHTML = `
+                            <div class="activity-time">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>
+                                <span id="timer-${activity.id || 'game'}">00:00</span>
+                            </div>
+                        `;
+                    }
+
                     html += `
                         <div class="activity-box">
-                            <img src="${getActivityImage(activity)}"
-                                class="activity-img"
-                                alt="Activity image">
-
+                            <img src="${getActivityImage(activity)}" class="activity-img" alt="Etkinlik">
                             <div class="activity-info">
-                                <div class="activity-header">
-                                    Playing Now
-                                </div>
-
-                                <div class="activity-name">
-                                    ${escapeHTML(activity.name)}
-                                </div>
-
-                                <div class="activity-details">
-                                    ${escapeHTML(
-                                        activity.state ||
-                                        activity.details ||
-                                        ""
-                                    )}
-                                </div>
+                                <div class="activity-header">OYNUYOR</div>
+                                <div class="activity-name">${escapeHTML(activity.name)}</div>
+                                <div class="activity-details">${escapeHTML(activity.details || "")}</div>
+                                ${activity.state ? `<div class="activity-details" style="color:#888;">${escapeHTML(activity.state)}</div>` : ""}
+                                ${timeHTML}
                             </div>
                         </div>
                     `;
                 });
 
-            document.getElementById(
-                "activities-wrapper"
-            ).innerHTML = html || `
-                <div class="activity-box"
-                    style="justify-content:center;opacity:.35;">
-                    INACTIVE
-                </div>
+            document.getElementById("activities-wrapper").innerHTML = html || `
+                <div class="activity-box" style="justify-content:center;opacity:.35;">INACTIVE</div>
             `;
         }
 
