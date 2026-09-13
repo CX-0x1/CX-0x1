@@ -409,11 +409,31 @@
         }
 
         /* AKTİVİTE KUTUSU ANA ALANI */
+        /* AKILLI HAREKETLİ AKTİVİTE ALANI */
         .activities-wrapper {
             display: flex;
             flex-direction: column;
             gap: 15px;
             transform: translateZ(20px);
+            
+            /* En fazla 2 pencere sığacak yükseklik sınırı */
+            max-height: 245px; 
+            overflow-y: auto;
+            padding: 5px 2px;
+            
+            /* Diğer şeylerin üstüne binmesin diye kutu sınırında gizlenme maskesi */
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 92%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 92%, transparent 100%);
+            
+            /* Kaydırma çubuğunu tamamen gizleme (Firefox için) */
+            scrollbar-width: none; 
+        }
+
+        /* Kaydırma çubuğunu tamamen gizleme (Chrome, Safari ve Edge için) */
+        .activities-wrapper::-webkit-scrollbar {
+            display: none; 
+            width: 0 !important;
+            background: transparent;
         }
 
         .activity-box {
