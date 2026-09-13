@@ -408,41 +408,6 @@
             transform: translateY(-2px) translateZ(35px);
         }
 
-                /* SOL ÜST SOHBET ET BUTONU */
-        .sohbet-et-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 9999;
-            padding: 10px 20px;
-            color: #050505; /* Arka plan siyah olduğu için yazı siyah */
-            background: var(--gold); /* Sitenin kendi altın sarısı */
-            border: 1px solid var(--gold);
-            border-radius: 12px;
-            font-size: .85rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            box-shadow: 0 0 15px rgba(212, 175, 55, .4);
-            transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .sohbet-et-btn:hover {
-            color: var(--gold);
-            background: transparent;
-            box-shadow: 0 0 25px rgba(212, 175, 55, .7);
-            transform: scale(1.05);
-        }
-
-        /* TELEFONLARDA BUTONUN AŞAĞIYA ALINMASI */
-        @media (max-width: 768px) {
-            .sohbet-et-btn {
-                top: auto;
-                bottom: 20px;
-                left: 20px;
-            }
-        }
-
         /* AKTİVİTE KUTUSU ANA ALANI */
         /* QUANTUM GOLD SLIDER ALANI */
         .activities-wrapper {
@@ -883,10 +848,6 @@
             <div class="click-text">LOADING</div>
         </div>
     </div>
-
-        <!-- SİBER SOHBET GEÇİŞ BUTONU -->
-    <button class="sohbet-et-btn" onclick="location.href='./sohbet/index_sohbet.html'">SOHBET ET</button>
-
 
     <video id="bg-video" autoplay loop muted playsinline preload="auto">
         <source src="./video.mp4" type="video/mp4">
