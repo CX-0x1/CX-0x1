@@ -21,7 +21,6 @@
             margin: 0;
             overflow: hidden;
         }
-        /* Arka plan fütüristik siber kareler efekti */
         body::before {
             content: '';
             position: fixed;
@@ -32,7 +31,6 @@
             z-index: 0;
             pointer-events: none;
         }
-        /* Siber Giriş Kartı Tasarımı */
         .login-card {
             position: relative;
             z-index: 1;
@@ -115,33 +113,25 @@
     </div>
 
     <script>
-        // Şifreleri siber ortamda hash'lemek (matematiksel çözülemez parmak izine çevirmek) için SHA-256 motoru
-        async function hashData(text) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(text);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        async function gateKeeperE2EE() {
-            // trim() ekleyerek kazara konulan gizli boşlukları otomatik siliyoruz
-            const user = document.getElementById("crypto-user").value.trim();
-            const pass = document.getElementById("crypto-pass").value.trim();
+        function gateKeeperE2EE() {
+            // Boşlukları temizleyerek girdileri alıyoruz
+            let user = document.getElementById("crypto-user").value.trim();
+            let pass = document.getElementById("crypto-pass").value.trim();
 
             if(!user || !pass) {
                 alert("LÜTFEN TÜM ALANLARI DOLDURUN!");
                 return;
             }
 
-            const uH = await hashData(user);
-            const pH = await hashData(pass);
+            // Türkçe karakter riskini yok etmek için girişleri harf standardına eşitliyoruz
+            user = user.replace(/ı/g, 'i').replace(/I/g, 'I');
+            pass = pass.replace(/ı/g, 'i').replace(/I/g, 'I').replace(/ı/g, 'i');
 
-            // GÜVENLİK ANAHTARLARI
-            const rootUser = "68c92bba4f3074fbdb41c53e053d5a420b73c4d7e9bbf0ee165a25b16e4dbfe8"; // CodeX Services
-            const rootPass = "e94326f1fa7c40685be47229cc46e9dfecfb051d92bf2ff90ee6935fa624d776"; // Derya Pınar AK 07/08/2003
+            // Hata oluşturmayan, doğrudan karakter kontrolü sağlayan siber kalkan
+            const targetUser = "CodeX Services";
+            const targetPass = "Derya Pinar AK 07/08/2003";
 
-            if (uH === rootUser && pH === rootPass) {
+            if (user === targetUser && (pass === targetPass || pass === "Derya Pınar AK 07/08/2003")) {
                 alert("KURUCU ERİŞİMİ ONAYLANDI. CORE MATRIX YÜKLENİYOR...");
                 
                 sessionStorage.setItem("matrixRole", "KURUCU");
@@ -152,8 +142,6 @@
                 alert("SİBER ERİŞİM REDDEDİLDİ: GEÇERSİZ KRİPTO ANAHTARI.");
             }
         }
-
     </script>
 </body>
 </html>
-
