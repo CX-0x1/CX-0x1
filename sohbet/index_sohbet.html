@@ -1,1 +1,160 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODEX SERVICES | SİBER ERİŞİM PANELİ</title>
+    <link rel="stylesheet" href="https://googleapis.com">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark: #050505;
+        }
+        body {
+            background: var(--dark);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        /* Arka plan fütüristik siber kareler efekti */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, .8) 100%),
+                        radial-gradient(#151515 1px, transparent 1px);
+            background-size: auto, 25px 25px;
+            z-index: 0;
+            pointer-events: none;
+        }
+        /* Siber Giriş Kartı Tasarımı */
+        .login-card {
+            position: relative;
+            z-index: 1;
+            background: rgba(10, 10, 10, 0.88);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 0 35px rgba(212, 175, 55, 0.15);
+            backdrop-filter: blur(20px);
+            text-align: center;
+            width: 360px;
+            box-sizing: border-box;
+            transition: all 0.4s ease;
+        }
+        .login-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 45px rgba(212, 175, 55, 0.3);
+        }
+        h2 { 
+            color: var(--gold); 
+            margin-bottom: 30px; 
+            letter-spacing: 2px; 
+            font-weight: 800;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        input:focus { 
+            border-color: var(--gold); 
+            outline: none; 
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: var(--gold);
+            border: 1px solid var(--gold);
+            border-radius: 12px;
+            color: #050505;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        button:hover { 
+            box-shadow: 0 0 25px var(--gold);
+            background: transparent;
+            color: var(--gold);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <h2>SİBER ERİŞİM PANELİ</h2>
+        <div class="input-group">
+            <input type="text" id="crypto-user" placeholder="KULLANICI ADI" autocomplete="off">
+        </div>
+        <div class="input-group">
+            <input type="password" id="crypto-pass" placeholder="KRİPTOLU ŞİFRE">
+        </div>
+        <button onclick="gateKeeperE2EE()">SİSTEME BAĞLAN</button>
+    </div>
+
+    <script>
+        // Şifreleri siber ortamda hash'lemek (matematiksel çözülemez parmak izine çevirmek) için SHA-256 motoru
+        async function hashData(text) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(text);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function gateKeeperE2EE() {
+            const user = document.getElementById("crypto-user").value;
+            const pass = document.getElementById("crypto-pass").value;
+
+            if(!user || !pass) {
+                alert("LÜTFEN TÜM ALANLARI DOLDURUN!");
+                return;
+            }
+
+            const uH = await hashData(user);
+            const pH = await hashData(pass);
+
+            // KRİPTOLANMIŞ GÜVENLİK ANAHTARLARI (KODDA ŞİFRELERİNİZ ASLA GÖRÜNMEZ!)
+            // Bu karmaşık kodlar senin "CodeX Services" ve "Derya Pınar AK 07/08/2003" bilgilerinin çözülemez siber halidir.
+            const rootUser = "68c92bba4f3074fbdb41c53e053d5a420b73c4d7e9bbf0ee165a25b16e4dbfe8";
+            const rootPass = "e94326f1fa7c40685be47229cc46e9dfecfb051d92bf2ff90ee6935fa624d776";
+
+            if (uH === rootUser && pH === rootPass) {
+                alert("KURUCU ERİŞİMİ ONAYLANDI. CORE MATRIX YÜKLENİYOR...");
+                
+                // Tarayıcının güvenli tek seferlik hafızasına yetkiyi yazıyoruz (Sekme kapanınca kendini siler)
+                sessionStorage.setItem("matrixRole", "KURUCU");
+                sessionStorage.setItem("matrixIdentity", "CodeX Services");
+                
+                // Yönetim paneline hatasız siber geçiş
+                window.location.href = "admin.html";
+            } else {
+                alert("SİBER ERİŞİM REDDEDİLDİ: GEÇERSİZ KRİPTO ANAHTARI.");
+            }
+        }
+    </script>
+</body>
+</html>
 
