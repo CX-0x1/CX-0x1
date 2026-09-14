@@ -836,6 +836,43 @@
             * {
                 cursor: auto !important;
             }
+
+                    /* PREMIUM SOL ÜST SOHBET GEÇİŞ BUTONU */
+        .sohbet-et-btn {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            z-index: 99999; /* Her şeyin, kar efektinin bile üstünde durur */
+            padding: 12px 24px;
+            color: #050505;
+            background: var(--gold); /* Sitenin asil altın sarısı */
+            border: 1px solid var(--gold);
+            border-radius: 14px;
+            font-size: .8rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(212, 175, 55, .35);
+            cursor: pointer !important;
+            transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sohbet-et-btn:hover {
+            color: var(--gold);
+            background: transparent;
+            box-shadow: 0 0 30px rgba(212, 175, 55, .7);
+            transform: scale(1.05) translateZ(30px);
+        }
+
+        /* TELEFONLARDA BUTONU EN ALTA SABİTLEME */
+        @media (max-width: 768px) {
+            .sohbet-et-btn {
+                top: auto;
+                bottom: 25px;
+                left: 25px;
+                width: calc(100% - 50px); /* Mobilde tam genişlik buton olur */
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -849,6 +886,9 @@
         </div>
     </div>
 
+    <!-- 7/24 KRİPTOLU SOHBET ENTEGRASYONU -->
+    <button class="sohbet-et-btn" onclick="location.href='./sohbet/index_sohbet.html'">SOHBET ET</button>
+    
     <video id="bg-video" autoplay loop muted playsinline preload="auto">
         <source src="./video.mp4" type="video/mp4">
     </video>
