@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODEX SERVICES // MATRIX CHATWAY</title>
+    <link rel="stylesheet" href="https://googleapis.com">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark: #050505;
+            --kurucu: #d4af37;
+            --yonetici: #FF4500;
+            --admin: #9400D3;
+            --elit: #00FFFF;
+            --varsayilan: #C0C0C0;
+        }
+        body {
+            background: var(--dark);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            height: 100vh;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,.8) 100%),
+                        radial-gradient(#121212 1px, transparent 1px);
+            background-size: auto, 20px 20px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        /* ANA MATRIX ARAYÜZÜ */
+        .matrix-wrapper {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            width: 1200px;
+            max-width: 95vw;
+            height: 85vh;
+            background: rgba(10, 10, 10, 0.88);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 24px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.7);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+        }
+        /* YETKİLİLER İÇİN AÇILAN SOL SİBER PANEL */
+        .cyber-admin-panel {
+            background: rgba(5, 5, 5, 0.95);
+            border-right: 1px solid rgba(212, 175, 55, 0.15);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+        }
+        /* STANDART SOHBET SOL MENÜSÜ (HERKESDE VAR) */
+        .chat-sidebar {
+            background: rgba(8, 8, 8, 0.5);
+            border-right: 1px solid rgba(255,255,255,0.03);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+        }
+        /* SOHBET PENCERESİ */
+        .chat-main {
+            display: flex;
+            flex-direction: column;
+            background: rgba(3, 3, 3, 0.4);
+        }
+        h2, h3 { color: var(--gold); margin: 0 0 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; font-size: 0.9rem; text-shadow: 0 0 8px rgba(212,175,55,0.2); }
+        
+        /* PARLAYAN ALTIN SİBER BUTON */
+        .cyber-btn {
+            background: var(--gold) !important;
+            color: #050505 !important;
+            border: 1px solid var(--gold) !important;
+            padding: 12px 20px !important;
+            border-radius: 10px !important;
+            font-weight: 800 !important;
+            font-size: 0.8rem !important;
+            letter-spacing: 1px !important;
+            text-transform: uppercase !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 0 10px rgba(212,175,55,0.2) !important;
+            display: block !important;
+            width: 100% !box-sizing: border-box;
+        }
+        .cyber-btn:hover {
+            background: transparent !important;
+            color: var(--gold) !important;
+            box-shadow: 0 0 20px var(--gold) !important;
+        }
+        .form-group { margin-bottom: 12px; }
+        input, select {
+            width: 100%;
+            padding: 11px;
+            background: #111;
+            border: 1px solid #252525;
+            border-radius: 8px;
+            color: #fff;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 0.8rem;
+        }
+        input:focus, select:focus { border-color: var(--gold); outline: none; }
+        
+        /* LİSTE ELEMANLARI VE PROFiLLER */
+        .list-box { display: flex; flex-direction: column; gap: 8px; }
+        .user-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: rgba(255,255,255,0.01);
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 10px;
+            cursor: pointer !important;
+            transition: all 0.2s ease;
+        }
+        .user-row:hover { background: rgba(212,175,55,0.04); border-color: rgba(212,175,55,0.2); }
+        .avatar-img { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(212,175,55,0.3); object-fit: cover; }
+        .user-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+        .user-name { font-size: 0.85rem; font-weight: 700; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .user-id-tag { font-size: 0.7rem; color: #666; font-weight: 600; }
+        
+        /* MESAJ ALANI */
+        .chat-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; justify-content: space-between; align-items: center; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: rgba(5,5,5,0.3); }
+        .msg { max-width: 70%; padding: 10px 14px; border-radius: 12px; font-size: 0.85rem; line-height: 1.4; }
+        .msg.me { background: rgba(212, 175, 55, 0.12); border: 1px solid var(--gold); align-self: flex-end; }
+        .msg.other { background: #141414; border: 1px solid #222; align-self: flex-start; }
+        .chat-input-area { padding: 20px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; gap: 10px; }
+        .role-badge { font-size: 0.6rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+        .r-kurucu { color: var(--kurucu); border: 1px solid var(--kurucu); background: rgba(212,175,55,0.05); }
+        .r-yonetici { color: var(--yonetici); border: 1px solid var(--yonetici); background: rgba(255,69,0,0.05); }
+        .r-admin { color: var(--admin); border: 1px solid var(--admin); background: rgba(148,0,211,0.05); }
+    </style>
+</head>
+
+  <body>
+
+    <div class="matrix-wrapper" id="main-matrix-layout">
+        
+        <!-- ========================================================= -->
+        <!-- SADECE YETKİLİLERİN (KURUCU, YÖNETİCİ, ADMIN) GÖRECEĞİ GİZLİ SİBER PANEL -->
+        <!-- ========================================================= -->
+        <div class="cyber-admin-panel" id="core-cyber-panel" style="display: none;">
+            <h2>⚡ MATRIX CORE // DENETİM MASASI</h2>
+            
+            <!-- KULLANICI OLUŞTURMA VE PARLAYAN BUTON -->
+            <div class="form-group">
+                <input type="text" id="new-user" placeholder="KULLANICI ADI" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <input type="password" id="new-pass" placeholder="KRİPTOLU ŞİFRE">
+            </div>
+            <div class="form-group">
+                <select id="new-role">
+                    <option value="VARSAYILAN">VARSAYILAN ROLLER</option>
+                    <option value="ELİT">ELİT ÜYE</option>
+                    <option value="ADMIN">SİBER ADMIN</option>
+                    <option value="YÖNETİCİ">SİSTEM YÖNETİCİSİ</option>
+                </select>
+            </div>
+            SİSTEME KAYDET</button>
+            
+            <hr style="border-color: rgba(212,175,55,0.1); margin: 15px 0;">
+
+            <!-- GÜVENLİK ODASI (BAN VE SÜRE CEZASI) -->
+            <h2>🔒 SİBER GÜVENLİK ODASI</h2>
+            <div class="form-group">
+                <select id="ban-target-select">
+                    <option value="">HEDEF KULLANICI SEÇİN</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select id="punish-type">
+                    <option value="BAN">TAMAMEN YASAKLA (BAN)</option>
+                    <option value="TIME">SÜRELİ ENGELLE (DAKİKA)</option>
+                </select>
+            </div>
+            <div class="form-group" id="punish-time-group" style="display: none;">
+                <input type="number" id="punish-minutes" placeholder="CEZA SÜRESİ (DAKİKA)" min="1">
+            </div>
+            <button class="cyber-btn" style="background:#FF4500 !important; color:#fff !important;" onclick="applySecurityProtocol()">PROTOKOLÜ UYGULA</button>
+
+            <hr style="border-color: rgba(212,175,55,0.1); margin: 15px 0;">
+
+            <!-- SİBER GÜNLÜK (LOG SİSTEMİ) -->
+            <h2>📜 SİBER GÜNLÜK (LOG)</h2>
+            <div id="cyber-logs" style="background:#000; border:1px solid #151515; padding:10px; border-radius:8px; font-family:monospace; font-size:0.7rem; color:#43b581; height:120px; overflow-y:auto; line-height:1.4;">
+                [SYSTEM] GÜVENLİK DUVARI AKTİF...
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SOHBET SOL SİDEBARI (HER KULLANICIDA VARDIR) -->
+        <!-- ========================================================= -->
+        <div class="chat-sidebar">
+            <!-- KENDİ PROFİLİNİ DÜZENLEME ALANI -->
+            <h2>👤 PROFİL AYARLARIM</h2>
+            <div class="user-row" style="cursor:default !important; margin-bottom:10px;">
+                <img src="../CX_logo.jpg" class="avatar-img" alt="Profil">
+                <div class="user-info">
+                    <span class="user-name" id="my-profile-name">Yükleniyor...</span>
+                    <span class="user-id-tag" id="my-profile-id">ID: ----</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" id="change-my-name" placeholder="YENİ ADINIZ">
+            </div>
+            <button class="cyber-btn" style="padding:6px 12px !important; font-size:0.7rem !important;" onclick="updateMyProfile()">PROFİLİ GÜNCELLE</button>
+
+            <hr style="border-color: rgba(255,255,255,0.03); margin: 10px 0;">
+
+            <!-- ID İLE ARKADAŞ EKLEME VE GRUP KURMA -->
+            <h2>🤝 SİBER BAĞLANTI</h2>
+            <div class="form-group">
+                <input type="text" id="friend-id-input" placeholder="ARKADAŞ ID VEYA GRUP ADI">
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+                <button class="cyber-btn" style="padding:6px !important; font-size:0.7rem !important;" onclick="addFriendByID()">ARKADAŞ EKLE</button>
+                <button class="cyber-btn" style="padding:6px !important; font-size:0.7rem !important; background:#00FFFF !important;" onclick="createNewGroup()">GRUP KUR</button>
+            </div>
+
+            <hr style="border-color: rgba(255,255,255,0.03); margin: 10px 0;">
+
+            <!-- AKTİF BAĞLANTILAR (KULLANICILAR VE GRUPLAR) -->
+            <h2>💬 AKTİF BAĞLANTILARINIZ</h2>
+            <div class="list-box" id="active-contacts-list">
+                <!-- Sadece eklenen arkadaşlar, kurulan gruplar veya kurucuda her şey görünecek -->
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- ANA MESAJLAŞMA ALANI -->
+        <!-- ========================================================= -->
+        <div class="chat-main">
+            <div class="chat-header">
+                <div>
+                    <span class="user-name" id="current-chat-title" style="font-size:1rem;">SOHBET SEÇİLMEDİ</span>
+                    <div id="current-chat-meta" style="font-size:0.7rem; color:#666; margin-top:2px;">Bağlantı kurmak için sol listeden seçim yapın</div>
+                </div>
+                <div id="current-chat-badge"></div>
+            </div>
+            
+            <div class="chat-messages" id="chat-messages-box">
+                <p style="color:#444; text-align:center; margin-top:180px; font-size:0.85rem;">Siber ağa hoş geldiniz. Yazışmaya başlamak için bir hedef seçin.</p>
+            </div>
+            
+            <div class="chat-input-area">
+                <input type="text" id="chat-message-input" placeholder="Kriptolu mesajınızı yazın..." disabled onkeydown="if(event.key === 'Enter') sendMatrixMessage()">
+                <button class="send-btn" id="chat-send-btn" onclick="sendMatrixMessage()" disabled>GÖNDER</button>
+            </div>
+        </div>
+
+    </div>
+
+        <script>
+        // OTURUM BİLGİLERİ (GİRİŞ EKRANINDAN GELEN VERİLER)
+        const myIdentityName = sessionStorage.getItem("matrixIdentity") || "Misafir Kullanıcı";
+        const myIdentityRole = sessionStorage.getItem("matrixRole") || "VARSAYILAN";
+        
+        let currentActiveChat = null; // Şu an konuşulan kişi veya grup ID'si
+        let activeIntervals = {};
+
+        // SİSTEM İLK AÇILDIĞINDA VERİTABANINI KONTROL EDEN MOTOR
+        window.addEventListener("DOMContentLoaded", () => {
+            // Eğer veritabanı boşsa ilk kurulumu yap
+            if (!localStorage.getItem("matrix_users_db")) {
+                const initialUsers = [
+                    {
+                        id: "CX-1923",
+                        username: "CodeX Services",
+                        role: "KURUCU",
+                        messages: {},
+                        friends: [],
+                        isBanned: false,
+                        punishUntil: 0
+                    }
+                ];
+                localStorage.setItem("matrix_users_db", JSON.stringify(initialUsers));
+            }
+
+            // Kurucuya özel olarak kendi ID'sini tarayıcı hafızasında sabitleyelim
+            if (myIdentityName === "CodeX Services") {
+                sessionStorage.setItem("matrixMyID", "CX-1923");
+            } else if (!sessionStorage.getItem("matrixMyID")) {
+                // Eğer normal kullanıcı ise ve henüz ID'si yoksa rastgele bir ID ata
+                sessionStorage.setItem("matrixMyID", generateRandomCyberID());
+            }
+
+            // GÜVENLİK DUYARLILIK SİSTEMİ: YETKİLİLERİ GÖRE GİZLİ SİBER PANELİ AÇ
+            if (myIdentityRole === "KURUCU" || myIdentityRole === "YÖNETİCİ" || myIdentityRole === "ADMIN") {
+                const adminPanel = document.getElementById("core-cyber-panel");
+                if (adminPanel) {
+                    adminPanel.style.display = "flex";
+                    // 3 Sütunlu yerleşime zorla
+                    document.getElementById("main-matrix-layout").style.gridTemplateColumns = "300px 280px 1fr";
+                }
+                addCyberLog(`[GÜVENLİK] ${myIdentityName} [${myIdentityRole}] YETKİSİYLE DENETİM MASASINA BAĞLANDI.`);
+            }
+
+            // Ceza kutusu kontrol dinleyicisi
+            const punishTypeSelect = document.getElementById("punish-type");
+            if (punishTypeSelect) {
+                punishTypeSelect.addEventListener("change", (e) => {
+                    const timeGroup = document.getElementById("punish-time-group");
+                    if (timeGroup) {
+                        timeGroup.style.display = e.target.value === "TIME" ? "block" : "none";
+                    }
+                });
+            }
+
+            // Profil bilgilerini ekrana yaz
+            document.getElementById("my-profile-name").textContent = myIdentityName;
+            document.getElementById("my-profile-id").textContent = "ID: " + sessionStorage.getItem("matrixMyID");
+
+            // Tüm arayüz listelerini yükle
+            refreshMatrixSystem();
+        });
+
+        // 4 HANELİ RASTGELE SİBER ID ÜRETİCİ
+        function generateRandomCyberID() {
+            const num = Math.floor(1000 + Math.random() * 9000);
+            return `CX-${num}`;
+        }
+
+        // CANLI TERMİNAL GÜNLÜĞÜNE (LOG) VERİ EKLEME SİSTEMİ
+        function addCyberLog(text) {
+            const logBox = document.getElementById("cyber-logs");
+            if (!logBox) return;
+            const now = new Date();
+            const timeStr = `[${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}]`;
+            logBox.innerHTML += `<div style="margin-bottom:2px;">${timeStr} ${text}</div>`;
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        // SİSTEME KAYDET (KULLANICI OLUŞTURMA) MOTORU
+        function createIdentity() {
+            const name = document.getElementById("new-user").value.trim();
+            const pass = document.getElementById("new-pass").value;
+            const role = document.getElementById("new-role").value;
+
+            if (!name || !pass) {
+                alert("LÜTFEN KULLANICI ADI VE ŞİFRE ALANLARINI DOLDURUN!");
+                return;
+            }
+
+            // RÜTBE ATARKEN ÇİFT AŞAMALI GÜVENLİK SORUSU (EMİN MİSİNİZ?)
+            if (role === "YÖNETİCİ" || role === "ADMIN") {
+                let check1 = confirm(`DİKKAT: ${name} kullanıcısına üst düzey [${role}] yetkisi vermek üzeresiniz. Emin misiniz?`);
+                if (check1) {
+                    let check2 = confirm(`KRİTİK ONAY: Bu işlem tüm paneli etkiler. Son kararınız mı?`);
+                    if (!check2) {
+                        addCyberLog(`[İPTAL] ${name} İÇİN RÜTBE ATAMA İŞLEMİ KURUCU TARAFINDAN REDDEDİLDİ.`);
+                        return;
+                    }
+                } else {
+                    addCyberLog(`[İPTAL] ${name} İÇİN RÜTBE ATAMA İŞLEMİ REDDEDİLDİ.`);
+                    return;
+                }
+            }
+
+            let usersData = JSON.parse(localStorage.getItem("matrix_users_db")) || [];
+
+            if (usersData.some(u => u.username.toLowerCase() === name.toLowerCase())) {
+                alert("BU KULLANICI ADI SİSTEMDE ZATEN KAYITLI!");
+                return;
+            }
+
+            // Yeni siber kimliği oluştur ve benzersiz ID ata
+            const newID = generateRandomCyberID();
+            const newIdentity = {
+                id: newID,
+                username: name,
+                role: role,
+                messages: {}, // Diğer kullanıcılarla olan mesaj geçmişleri havuzu
+                friends: [], // Arkadaş listesi ID'leri
+                isBanned: false,
+                punishUntil: 0
+            };
+
+            usersData.push(newIdentity);
+            localStorage.setItem("matrix_users_db", JSON.stringify(usersData));
+
+            addCyberLog(`[KAYIT] ${name} KULLANICISI ${newID} NUMARASIYLA SİSTEME İŞLENDİ.`);
+            alert(`${name} Başarıyla ${newID} Kimliğiyle Sisteme Kaydedildi!`);
+
+            // Girdileri temizle ve sistemi tazele
+            document.getElementById("new-user").value = "";
+            document.getElementById("new-pass").value = "";
+            refreshMatrixSystem();
+        }
+
+                  // PROFIL AYARLARINI GÜNCELLEME (İSİM DEĞİŞTİRME)
+        function updateMyProfile() {
+            const newName = document.getElementById("change-my-name").value.trim();
+            if (!newName) { alert("LÜTFEN GEÇERLİ BİR İSİM YAZIN!"); return; }
+
+            sessionStorage.setItem("matrixIdentity", newName);
+            document.getElementById("my-profile-name").textContent = newName;
+            
+            let usersData = JSON.parse(localStorage.getItem("matrix_users_db")) || [];
+            let myID = sessionStorage.getItem("matrixMyID");
+            let myUserIndex = usersData.findIndex(u => u.id === myID);
+            
+            if (myUserIndex !== -1) {
+                usersData[myUserIndex].username = newName;
+                localStorage.setItem("matrix_users_db", JSON.stringify(usersData));
+            }
+
+            addCyberLog(`[PROFİL] KULLANICI KENDİ ADINI '${newName}' OLARAK DEĞİŞTİRDİ.`);
+            alert("Profil isminiz başarıyla güncellendi!");
+            document.getElementById("change-my-name").value = "";
+            refreshMatrixSystem();
+        }
+
+        // ID İLE ARKADAŞ EKLEME PROTOKOLÜ
+        function addFriendByID() {
+            const targetID = document.getElementById("friend-id-input").value.trim();
+            let myID = sessionStorage.getItem("matrixMyID");
+
+            if (!targetID) { alert("LÜTFEN BİR ID YAZIN!"); return; }
+            if (targetID === myID) { alert("KENDİ KENDİNİZİ EKLEYEMEZSİNİZ!"); return; }
+
+            let usersData = JSON.parse(localStorage.getItem("matrix_users_db")) || [];
+            let targetUser = usersData.find(u => u.id === targetID);
+
+            if (!targetUser) {
+                alert("BU ID NUMARASINA AİT SİBER KİMLİK BULUNAMADI!");
+                return;
+            }
+
+            let myUserIndex = usersData.findIndex(u => u.id === myID);
+            if (myUserIndex !== -1) {
+                if (!usersData[myUserIndex].friends) usersData[myUserIndex].friends = [];
+                if (usersData[myUserIndex].friends.includes(targetID)) {
+                    alert("BU KULLANICI ZATEN ARKADAŞ LİSTENİZDE!");
+                    return;
+                }
+                usersData[myUserIndex].friends.push(targetID);
+                localStorage.setItem("matrix_users_db", JSON.stringify(usersData));
+                
+                addCyberLog(`[BAĞLANTI] ${sessionStorage.getItem("matrixIdentity")} KIŞİSİ ${targetUser.username} İLE BAĞLANTI KURDU.`);
+                alert(`${targetUser.username} başarıyla ağınıza eklendi!`);
+                document.getElementById("friend-id-input").value = "";
+                refreshMatrixSystem();
+            }
+        }
+
+        // KRİPTOLU SİBER GRUP KURMA MOTORU
+        function createNewGroup() {
+            const groupName = document.getElementById("friend-id-input").value.trim();
+            if (!groupName) { alert("LÜTFEN BİR GRUP ADI YAZIN!"); return; }
+
+            let usersData = JSON.parse(localStorage.getItem("matrix_users_db")) || [];
+            const groupID = "GRP-" + Math.floor(1000 + Math.random() * 9000);
+
+            const newGroup = {
+                id: groupID,
+                username: groupName,
+                role: "GRUP",
+                messages: {},
+                friends: [sessionStorage.getItem("matrixMyID")],
+                isBanned: false,
+                punishUntil: 0
+            };
+
+            usersData.push(newGroup);
+            localStorage.setItem("matrix_users_db", JSON.stringify(usersData));
+
+            addCyberLog(`[GRUP] ${groupName} [${groupID}] SİBER GRUBU KURULDU.`);
+            alert(`'${groupName}' Grubu ${groupID} Kimliğiyle Başarıyla Kuruldu!`);
+            document.getElementById("friend-id-input").value = "";
+            refreshMatrixSystem();
+        }
+
+        // SİBER GÜVENLİK PROTOKOLÜ (BAN VE SÜRE CEZASI UYGULAMA)
+        function applySecurityProtocol() {
+            const targetID = document.getElementById("ban-target-select").value;
+            const type = document.getElementById("punish-type").value;
+            
+            if (!targetID) { alert("LÜTFEN BİR HEDEF KULLANICI SEÇİN!"); return; }
+
+            let usersData = JSON.parse(localStorage.getItem("matrix_users_db")) || [];
+            let targetIndex = usersData.findIndex(u => u.id === targetID);
+
+            if (targetIndex === -1) return;
+
+            if (usersData[targetIndex].role === "KURUCU") {
+                alert("KURUCU RÜTBESİNE HİÇBİR CEZA PROTOKOLÜ UYGULANAMAZ!");
+                return;
+            }
+
+            if (type === "BAN") {
+                usersData[targetIndex].isBanned = true;
+                addCyberLog(`[YASAK] ${usersData[targetIndex].username} SİSTEMDEN TAMAMEN BANLANDI.`);
+                alert(`${usersData[targetIndex].username} kalıcı olarak yasaklandı.`);
+            } else if (type === "TIME") {
+                const mins = parseInt(document.getElementById("punish-minutes").value);
+                if (!mins || mins < 1) { alert("Lütfen geçerli bir dakika süresi girin!"); return; }
+                
+                const expireTime = Date.now() + (mins * 60 * 1000);
+                usersData[targetIndex].punishUntil = expireTime;
+                addCyberLog(`[CEZA] ${usersData[targetIndex].username} SİSTEMDEN ${mins} DAKİKA UZAKLAŞTIRILDI.`);
+                alert(`${usersData[targetIndex].username} kullanıcısına ${mins} dakika süre cezası verildi.`);
+            }
+
+            localStorage.setItem("matrix_users_db", JSON.stringify(usersData));
+            refreshMatrixSystem();
+        }
+
+                  // MASTER YENİLEME VE LİSTELEME MOTORU
+        function refreshMatrixSystem() {
+            let usersData = JSON.parse(localStorage.getItem("matrix_users_db")) || [];
+            let myID = sessionStorage.getItem("matrixMyID");
+            let myUser = usersData.find(u => u.id === myID) || { friends: [] };
+
+            // --- GÜVENLİK PROTOKOLÜ SEÇİM LİSTESİ ---
+            const banSelect = document.getElementById("ban-target-select");
+            if (banSelect) {
+                let banHtml = `<option value="">HEDEF KULLANICI SEÇİN</option>`;
+                usersData.forEach(u => {
+                    if (u.id !== myID) banHtml += `<option value="${u.id}">${escapeHTML(u.username)} (${u.id})</option>`;
+                });
+                banSelect.innerHTML = banHtml;
+            }
+
+            // --- BAĞLANTI LİSTESİ (SOHBET SIDEBARI) ---
+            const contactsList = document.getElementById("active-contacts-list");
+            if (contactsList) {
+                let listHtml = "";
+
+                usersData.forEach(u => {
+                    if (u.id === myID) return;
+
+                    // GÜVENLİK KURALI: KURUCU herkesi görür. Normal kullanıcılar sadece arkadaşlarını veya gruplarını görür.
+                    let isFriend = (myUser.friends && myUser.friends.includes(u.id)) || (u.role === "GRUP" && u.friends.includes(myID));
+                    if (myIdentityRole === "KURUCU" || isFriend) {
+                        
+                        let rBadge = "";
+                        if (u.role === "KURUCU") rBadge = `<span class="role-badge r-kurucu">KURUCU</span>`;
+                        else if (u.role === "YÖNETİCİ") rBadge = `<span class="role-badge r-yonetici">YÖN</span>`;
+                        else if (u.role === "ADMIN") rBadge = `<span class="role-badge r-admin">ADM</span>`;
+                        else if (u.role === "GRUP") rBadge = `<span class="role-badge" style="color:#00FFFF; border:1px solid #00FFFF;">GRUP</span>`;
+
+                        listHtml += `
+                            <div class="user-row" onclick="openMatrixChat('${u.id}', '${escapeHTML(u.username)}')">
+                                <img src="../CX_logo.jpg" class="avatar-img" alt="Logo">
+                                <div class="user-info">
+                                    <span class="user-name">${escapeHTML(u.username)} ${rBadge}</span>
+                                    <span class="user-id-tag">ID: ${u.id}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                contactsList.innerHTML = listHtml || `<p style="color:#444; font-size:0.75rem; padding:10px; text-align:center;">Henüz bağlantınız yok. ID ile arkadaş veya grup ekleyin.</p>`;
+            }
+
+            // --- 4. PANEL (CASUS SEÇİM LİSTELERİ) ---
+            const s1 = document.getElementById("spy-user1");
+            const s2 = document.getElementById("spy-user2");
+            if (s1 && s2) {
+                let opts = `<option value="">HEDEF SEÇİN</option>`;
+                usersData.forEach(u => { opts += `<option value="${u.id}">${escapeHTML(u.username)}</option>`; });
+                s1.innerHTML = opts; s2.innerHTML = opts;
+            }
+        }
+
+        // SOHBET PENCERESİNİ AÇMA
+        function openMatrixChat(targetID, targetName) {
+            let usersData = JSON.parse(localStorage.getItem("matrix_users_db")) || [];
+            let myID = sessionStorage.getItem("matrixMyID");
+            let myUser = usersData.find(u => u.id === myID);
+
+            if (myUser && myUser.isBanned) { alert("BU HESAP MATRİXTEN TAMAMEN BANLANMIŞTIR!"); return; }
+            if (myUser && myUser.punishUntil > Date.now()) {
+                let diff = Math.ceil((myUser.punishUntil - Date.now()) / 60000);
+                alert(`SÜRE CEZANIZ VAR! Sohbet etmeniz ${diff} dakika engellendi.`);
+                return;
+            }
+
+            currentActiveChat = targetID;
+            document.getElementById("current-chat-title").textContent = targetName;
+            document.getElementById("current-chat-meta").textContent = `Güvenli Kriptolu Hat | ID: ${targetID}`;
+            
+            document.getElementById("chat-message-input").disabled = false;
+            document.getElementById("chat-send-btn").disabled = false;
+            
+            loadMatrixMessages();
+        }
+
+        // SOHBET MESAJLARINI EKRANA BASMA
+        function loadMatrixMessages() {
+            if (!currentActiveChat) return;
+            const box = document.getElementById("chat-messages-box");
+            let myID = sessionStorage.getItem("matrixMyID");
+
+            let chatKey = myID < currentActiveChat ? `${myID}_${currentActiveChat}` : `${currentActiveChat}_${myID}`;
+            if (currentActiveChat.startsWith("GRP-")) chatKey = currentActiveChat;
+
+            let messagesDB = JSON.parse(localStorage.getItem("matrix_chat_logs")) || {};
+            let roomMessages = messagesDB[chatKey] || [];
+
+            if (roomMessages.length === 0) {
+                box.innerHTML = `<p style="color:#333; text-align:center; margin-top:180px;">Siber bağlantı kuruldu. İlk mesajı siz gönderin.</p>`;
+                return;
+            }
+
+            let html = "";
+            roomMessages.forEach(m => {
+                let isMe = m.senderID === myID;
+                html += `
+                    <div class="msg ${isMe ? 'me' : 'other'}">
+                        <b>${escapeHTML(m.senderName)}:</b><br>${escapeHTML(m.text)}
+                    </div>
+                `;
+            });
+            box.innerHTML = html;
+            box.scrollTop = box.scrollHeight;
+        }
+
+        // KRİPTOLU MESAJ GÖNDERME SİSTEMİ
+        function sendMatrixMessage() {
+            const input = document.getElementById("chat-message-input");
+            const text = input.value.trim();
+            if (!text || !currentActiveChat) return;
+
+            let myID = sessionStorage.getItem("matrixMyID");
+            let chatKey = myID  0) {
+                let html = `<h4 style="color:var(--gold);">ÇÖZÜLEN SİBER MESAJ GEÇMİŞİ:</h4>`;
+                logs.forEach(m => { html += `<p><b>[${escapeHTML(m.senderName)}]:</b> ${escapeHTML(m.text)}</p>`; });
+                res.innerHTML = html;
+            } else {
+                res.innerHTML = `<h4 style="color:var(--yonetici);">ARALARINDA GEÇMİŞ BİR SOHBET VERİSİ BULUNAMADI.</h4>`;
+            }
+        }
+
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));
+        }
+    </script>
+</body>
+</html>
+
+  
