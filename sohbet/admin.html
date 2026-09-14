@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORE MATRIX // KURUCU DENETİM MASASI</title>
+    <title>CORE MATRIX // KURUCU PANELİ VE SOHBET</title>
     <link rel="stylesheet" href="https://googleapis.com">
     <style>
         :root {
@@ -90,6 +90,7 @@
             border-radius: 8px;
             color: #fff;
             box-sizing: border-box;
+            font-family: inherit;
         }
         input:focus, select:focus { border-color: var(--gold); outline: none; }
         .grid-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
@@ -98,7 +99,7 @@
             border: 1px solid #222;
             padding: 15px;
             border-radius: 12px;
-            max-height: 400px;
+            max-height: 450px;
             overflow-y: auto;
         }
         .item-row {
@@ -117,18 +118,28 @@
         .role-admin { color: var(--admin); background: rgba(148,0,211,0.1); border: 1px solid var(--admin); }
         .role-elit { color: var(--elit); background: rgba(0,255,255,0.1); border: 1px solid var(--elit); }
         .role-varsayilan { color: var(--varsayilan); background: rgba(192,192,192,0.1); border: 1px solid var(--varsayilan); }
+        .chat-container { display: flex; flex-direction: column; height: 380px; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 10px; background: #080808; border-radius: 8px; border: 1px solid #1a1a1a; margin-bottom: 10px; }
+        .msg { max-width: 75%; padding: 10px 14px; border-radius: 12px; font-size: 0.9rem; line-height: 1.4; }
+        .msg.me { background: rgba(212, 175, 55, 0.15); border: 1px solid var(--gold); align-self: flex-end; color: #fff; }
+        .msg.other { background: #181818; border: 1px solid #252525; align-self: flex-start; color: #eee; }
+        .msg-meta { font-size: 0.7rem; color: #666; margin-top: 4px; display: block; text-align: right; }
+        .chat-input-area { display: flex; gap: 10px; }
+        .chat-input-area input { flex: 1; }
+        .send-btn { width: auto !important; padding: 0 25px; background: var(--gold); color: #000; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 
 <body>
 
     <div class="container">
-        <h1>CORE MATRIX // KULLANICI VE CASUS DENETİM MERKEZİ</h1>
+        <h1>CORE MATRIX // KULLANICI YÖNETİMI VE CANLI SOHBET</h1>
         
         <div class="tabs">
             <button class="tab-btn active" onclick="switchPanel(1)">KULLANICI EKLE & YÖNET</button>
-            <button class="tab-btn" onclick="switchPanel(2)">KULLANICI SOHBET AĞACI</button>
-            <button class="tab-btn" onclick="switchPanel(3)">İKİLİ SOHBET CASUS FİLTRESİ</button>
+            <button class="tab-btn" onclick="switchPanel(2)">KULLANICILARLA CANLI SOHBET ET</button>
+            <button class="tab-btn" onclick="switchPanel(3)">KULLANICI SOHBET AĞACI (CASUS)</button>
+            <button class="tab-btn" onclick="switchPanel(4)">İKİLİ SOHBET CASUS FİLTRESİ</button>
         </div>
 
         <!-- 1. PANEL: KULLANICI OLUŞTURMA VE YÖNETME -->
@@ -154,49 +165,50 @@
 
             <h3>Mevcut Kullanıcı Matrisi</h3>
             <div class="list-view" id="matrix-users">
-                <div class="item-row" style="cursor:default !important;">
-                    <span>👑 CodeX Services (DOKUNULMAZ PROFiL)</span>
-                    <span class="role-badge role-kurucu">KURUCU</span>
+                <!-- Kullanıcı matrisi dinamik yüklenecek -->
+            </div>
+        </div>
+
+        <!-- 2. PANEL: DİĞER KULLANICILARLA CANLI SOHBET ALANI -->
+        <div id="panel2" class="panel-box">
+            <h3 id="active-chat-title">Sohbet Odası: Seçim Bekleniyor</h3>
+            <div class="grid-layout">
+                <div class="list-view" id="chat-user-list">
+                    <!-- Sohbet edilecek kişiler listesi -->
                 </div>
-                <div class="item-row">
-                    <span>👤 Berat</span>
-                    <span class="role-badge role-yonetici">YÖNETİCİ</span>
-                </div>
-                <div class="item-row">
-                    <span>👤 Hakan</span>
-                    <span class="role-badge role-admin">ADMIN</span>
+                <div class="chat-view">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chat-messages-container">
+                            <p style="color:#555; text-align:center; margin-top:150px;">Sohbet başlatmak için soldan bir kullanıcıya tıklayın...</p>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="chat-input-msg" placeholder="Mesajınızı yazın..." onkeydown="if(event.key === 'Enter') sendLiveMessage()">
+                            <button class="send-btn" onclick="sendLiveMessage()">GÖNDER</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 2. PANEL: KULLANICILARIN KİMLERLE KONUŞTUĞU (SEKME 1) -->
-        <div id="panel2" class="panel-box">
+        <!-- 3. PANEL: CASUS - KULLANICILARIN KİMLERLE KONUŞTUĞU -->
+        <div id="panel3" class="panel-box">
             <h3>Kullanıcı Veri Akış Ağacı</h3>
             <div class="grid-layout">
-                <div class="list-view">
-                    <div class="item-row" onclick="viewUserNetwork('Berat')">👤 Berat</div>
-                    <div class="item-row" onclick="viewUserNetwork('Hakan')">👤 Hakan</div>
+                <div class="list-view" id="spy-network-list">
+                    <!-- Casus kullanıcı listesi -->
                 </div>
                 <div class="chat-view" id="network-results">
-                    <p style="color:#555;">Bağlantı ağacını ve yazışılan kişileri dökmek için soldan bir kullanıcı seçin...</p>
+                    <p style="color:#555;">Bağlantı ağacını dökmek için soldan bir kullanıcı seçin...</p>
                 </div>
             </div>
         </div>
 
-        <!-- 3. PANEL: İKİ KİŞİ ARASINDAKİ DETAYLI MESAJLAR (SEKME 2) -->
-        <div id="panel3" class="panel-box">
+        <!-- 4. PANEL: CASUS - İKİ KİŞİ ARASINDAKİ DETAYLI MESAJLAR -->
+        <div id="panel4" class="panel-box">
             <h3>Kriptolu İkili Yazışma Geçmişi</h3>
             <div style="margin-bottom: 20px; display:flex; gap:10px;">
-                <select id="spy-user1">
-                    <option value="">1. HEDEF SEÇ</option>
-                    <option value="Berat">Berat</option>
-                    <option value="Hakan">Hakan</option>
-                </select>
-                <select id="spy-user2">
-                    <option value="">2. HEDEF SEÇ</option>
-                    <option value="Berat">Berat</option>
-                    <option value="Hakan">Hakan</option>
-                </select>
+                <select id="spy-user1"><option value="">1. HEDEF SEÇ</option></select>
+                <select id="spy-user2"><option value="">2. HEDEF SEÇ</option></select>
                 <button class="tab-btn" style="background:var(--gold); color:#000;" onclick="interceptMessages()">SOHBETİ DEŞİFRE ET</button>
             </div>
             <div class="chat-view" id="intercept-results">
@@ -206,50 +218,195 @@
     </div>
 
     <script>
-        // GÜVENLİK DUVARI: SADECE KURUCU GİRİŞ YAPTIYSA SAYFAYI GÖSTERİR
+        // GÜVENLİK KİLİDİ: SADECE KURUCU GİREBİLİR
         if(sessionStorage.getItem("matrixRole") !== "KURUCU") {
             alert("SİBER GÜVENLİK İHLALİ! YETKİSİZ ERİŞİM REDDEDİLDİ.");
             window.location.href = "index_sohbet.html";
         }
 
+        let selectedChatUser = null;
+
         // SEKMELER ARASI GEÇİŞ MOTORU
         function switchPanel(num) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.panel-box').forEach(p => p.classList.remove('active'));
-            event.target.classList.add('active');
+            
+            const currentBtn = document.querySelectorAll('.tabs .tab-btn')[num - 1];
+            if(currentBtn) currentBtn.classList.add('active');
+            
             document.getElementById('panel' + num).classList.add('active');
+            renderUserMatrix(); // Verileri her geçişte tazele
         }
 
-        // ÇİFT AŞAMALI ONAY MEKANİZMASIYLA KULLANICI OLUŞTURMA
+        // ÇALIŞAN KULLANICI OLUŞTURMA MOTORU
         function createIdentity() {
-            const name = document.getElementById("new-user").value;
+            const name = document.getElementById("new-user").value.trim();
             const r = document.getElementById("new-role").value;
+            const pass = document.getElementById("new-pass").value;
 
-            if(!name) { alert("LÜTFEN GEÇERLİ BİR KULLANICI ADI YAZIN."); return; }
+            if(!name || !pass) { alert("LÜTFEN KULLANICI ADI VE ŞİFRE ALANLARINI DOLDURUN."); return; }
 
-            // Üst düzey yetki koruması
+            // Üst düzey yetki koruması (Çift Onay)
             if(r === "YÖNETİCİ" || r === "ADMIN") {
-                let check1 = confirm(`DİKKAT: ${name} KULLANICISINA ÜST DÜZEY [${r}] YETKİSİ VERMEK ÜZERESİNİZ. EMİN MİSİNİZ?`);
+                let check1 = confirm(`DİKKAT: ${name} kullanıcısına üst düzey [${r}] yetkisi vermek üzeresiniz. Emin misiniz?`);
                 if(check1) {
-                    let check2 = confirm(`KRİTİK ONAY: BU İŞLEM KURUCU HARİÇ TÜM SİSTEMİ ETKİLER. SON KARARINIZ MI?`);
-                    if(!check2) { alert("İŞLEM SON SANİYEDE İPTAL EDİLDİ."); return; }
-                } else { alert("İŞLEM İPTAL EDİLDİ."); return; }
+                    let check2 = confirm(`KRİTİK ONAY: Bu işlem tüm paneli etkiler. Son kararınız mı?`);
+                    if(!check2) { alert("İşlem son saniyede iptal edildi."); return; }
+                } else { alert("İşlem iptal edildi."); return; }
             }
 
-            alert(`${name} KULLANICISI [${r}] RÜTBESİYLE BAŞARIYLA OLUŞTURULDU! TÜM VERİLER GİZLENDİ.`);
+            let usersData = JSON.parse(localStorage.getItem("matrix_users_db")) || [];
+            
+            if(usersData.some(user => user.username.toLowerCase() === name.toLowerCase())) {
+                alert("BU KULLANICI ADI SİSTEMDE ZATEN TANIMLI!");
+                return;
+            }
+
+            // Yeni kullanıcıyı hafızaya ekle
+            const newIdentity = {
+                username: name,
+                role: r,
+                messages: [] // Bu kullanıcının Kurucuyla olan mesaj geçmişi
+            };
+
+            usersData.push(newIdentity);
+            localStorage.setItem("matrix_users_db", JSON.stringify(usersData));
+
+            alert(`${name} başarıyla sisteme kaydedildi!`);
+            
+            document.getElementById("new-user").value = "";
+            document.getElementById("new-pass").value = "";
+            renderUserMatrix();
+        }
+        // TÜM LİSTELERİ VE PANELİ AYNYI ANDA GÜNCELLEYEN MASTER MOTOR
+        function renderUserMatrix() {
+            let usersData = JSON.parse(localStorage.getItem("matrix_users_db")) || [];
+            
+            // --- 1. PANEL LİSTESİ ---
+            const mainContainer = document.getElementById("matrix-users");
+            let mainHtml = `
+                <div class="item-row" style="cursor:default !important;">
+                    <span>👑 CodeX Services (SENİN PROFiLİN)</span>
+                    <span class="role-badge role-kurucu">KURUCU</span>
+                </div>
+            `;
+            usersData.forEach(user => {
+                let rClass = user.role === "YÖNETİCİ" ? "role-yonetici" : (user.role === "ADMIN" ? "role-admin" : (user.role === "ELİT" ? "role-elit" : "role-varsayilan"));
+                mainHtml += `
+                    <div class="item-row" style="cursor:default !important;">
+                        <span>👤 ${escapeHTML(user.username)}</span>
+                        <span class="role-badge ${rClass}">${user.role}</span>
+                    </div>
+                `;
+            });
+            if(mainContainer) mainContainer.innerHTML = mainHtml;
+
+            // --- 2. PANEL (CANLI SOHBET KULLANICI LİSTESİ) ---
+            const chatUserList = document.getElementById("chat-user-list");
+            if(chatUserList) {
+                let chatHtml = "";
+                usersData.forEach(user => {
+                    chatHtml += `<div class="item-row" onclick="startLiveChat('${escapeHTML(user.username)}')">👤 ${escapeHTML(user.username)} (Mesajlaş)</div>`;
+                });
+                chatUserList.innerHTML = chatHtml || `<p style='color:#444; padding:10px;'>Kullanıcı bulunamadı.</p>`;
+            }
+
+            // --- 3. PANEL (CASUS LİSTESİ) ---
+            const spyList = document.getElementById("spy-network-list");
+            if(spyList) {
+                let spyHtml = "";
+                usersData.forEach(user => {
+                    spyHtml += `<div class="item-row" onclick="viewUserNetwork('${escapeHTML(user.username)}')">👁️ ${escapeHTML(user.username)} Seç</div>`;
+                });
+                spyList.innerHTML = spyHtml || `<p style='color:#444; padding:10px;'>Hedef yok.</p>`;
+            }
+
+            // --- 4. PANEL (AÇILIR SEÇİM MENÜLERİ) ---
+            const s1 = document.getElementById("spy-user1");
+            const s2 = document.getElementById("spy-user2");
+            if(s1 && s2) { 
+                let currentVal1 = s1.value;
+                let currentVal2 = s2.value;
+                let opts = `<option value="">HEDEF SEÇİN</option>`;
+                usersData.forEach(user => {
+                    opts += `<option value="${escapeHTML(user.username)}">${escapeHTML(user.username)}</option>`;
+                });
+                s1.innerHTML = opts;
+                s2.innerHTML = opts;
+                s1.value = currentVal1;
+                s2.value = currentVal2;
+            }
         }
 
-        // CASUS SEKMESİ 1: KULLANICININ KİMLERLE KONUŞTUĞUNU TARAMA
+        // --- 2. PANEL: KURUCUNUN CANLI SOHBET ETME FONKSİYONLARI ---
+        function startLiveChat(username) {
+            selectedChatUser = username;
+            document.getElementById("active-chat-title").textContent = `Sohbet Odası: ${username} ile Canlı Bağlantı`;
+            loadChatMessages();
+        }
+
+        function loadChatMessages() {
+            if(!selectedChatUser) return;
+            const container = document.getElementById("chat-messages-container");
+            let usersData = JSON.parse(localStorage.getItem("matrix_users_db")) || [];
+            let currentUser = usersData.find(u => u.username === selectedChatUser);
+            
+            if(!currentUser || !currentUser.messages || currentUser.messages.length === 0) {
+                container.innerHTML = `<p style="color:#444; text-align:center; margin-top:150px;">Henüz mesaj yok. İlk mesajı sen gönder!</p>`;
+                return;
+            }
+
+            let chatHtml = "";
+            currentUser.messages.forEach(msg => {
+                let isMe = msg.sender === "CodeX Services";
+                chatHtml += `
+                    <div class="msg ${isMe ? 'me' : 'other'}">
+                        <b>${isMe ? 'Kurucu' : escapeHTML(msg.sender)}:</b><br>${escapeHTML(msg.text)}
+                        <span class="msg-meta">${msg.time}</span>
+                    </div>
+                `;
+            });
+            container.innerHTML = chatHtml;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendLiveMessage() {
+            const input = document.getElementById("chat-input-msg");
+            const text = input.value.trim();
+            if(!text || !selectedChatUser) return;
+
+            let usersData = JSON.parse(localStorage.getItem("matrix_users_db")) || [];
+            let userIndex = usersData.findIndex(u => u.username === selectedChatUser);
+
+            if(userIndex !== -1) {
+                if(!usersData[userIndex].messages) usersData[userIndex].messages = [];
+                
+                const now = new Date();
+                const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                
+                usersData[userIndex].messages.push({
+                    sender: "CodeX Services",
+                    text: text,
+                    time: timeStr
+                });
+
+                localStorage.setItem("matrix_users_db", JSON.stringify(usersData));
+                input.value = "";
+                loadChatMessages();
+            }
+        }
+
+        // --- 3. PANEL: CASUS SOHBET AĞACI ---
         function viewUserNetwork(name) {
             const res = document.getElementById("network-results");
             res.innerHTML = `
-                <h4>${name} Kullanıcısının Aktif Temas Noktaları:</h4>
-                <div class="item-row" onclick="alert('MESAJ GEÇMİŞİ DÖKÜLÜYOR...')">💬 ${name} ➔ Hakan (SON İLETİŞİM: 4 DK ÖNCE)</div>
-                <div class="item-row" onclick="alert('MESAJ GEÇMİŞİ DÖKÜLÜYOR...')">💬 ${name} ➔ KRİPTOLU_CİHAZ_02 (SON İLETİŞİM: DÜN)</div>
+                <h4>${name} Kullanıcısının Ağ Bağlantıları:</h4>
+                <div class="item-row" style="cursor:default !important;">💬 ${name} ➔ CodeX Services (Canlı Bağlantı Aktif)</div>
+                <div class="item-row" style="cursor:default !important;">💬 ${name} ➔ Kriptolu_Hat_02 (Güvenli Ağda)</div>
             `;
         }
 
-        // CASUS SEKMESİ 2: İKİ KİŞİ ARASINDAKİ DETAYLI MESAJLARI İZLEME
+        // --- 4. PANEL: İKİLİ CASUS SOHBET DEŞİFRE ETME ---
         function interceptMessages() {
             const u1 = document.getElementById("spy-user1").value;
             const u2 = document.getElementById("spy-user2").value;
@@ -257,14 +414,28 @@
 
             if(!u1 || !u2 || u1 === u2) { alert("LÜTFEN İKİ FARKLI HEDEF SEÇİN."); return; }
 
-            res.innerHTML = `
-                <h4 style="color:var(--gold);">${u1} ✖ ${u2} ARASINDAKİ ÇÖZÜLEN SİBER MESAJ AKIŞI:</h4>
-                <p><b>[${u1}]:</b> Kurucu sistemi güncelledi mi?</p>
-                <p><b>[${u2}]:</b> Evet, 3D kuantum slider ve sayaçlar kusursuz çalışıyor.</p>
-            `;
+            let usersData = JSON.parse(localStorage.getItem("matrix_users_db")) || [];
+            let targetUser = usersData.find(u => u.username === u1 || u.username === u2);
+
+            if(targetUser && targetUser.messages && targetUser.messages.length > 0) {
+                let html = `<h4 style="color:var(--gold);">${u1} ✖ ${u2} Arasındaki Çözülen Siber Mesaj Akışı:</h4>`;
+                targetUser.messages.forEach(msg => {
+                    html += `<p><b>[${msg.sender}]:</b> ${escapeHTML(msg.text)} <small style="color:#666">(${msg.time})</small></p>`;
+                });
+                res.innerHTML = html;
+            } else {
+                res.innerHTML = `<h4 style="color:var(--yonetici);">ARALARINDA GEÇMİŞ BİR SOHBET VERİSİ BULUNAMADI.</h4>`;
+            }
         }
+
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            renderUserMatrix();
+        });
     </script>
 </body>
 </html>
 
-  
