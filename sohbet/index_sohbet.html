@@ -125,8 +125,9 @@
         }
 
         async function gateKeeperE2EE() {
-            const user = document.getElementById("crypto-user").value;
-            const pass = document.getElementById("crypto-pass").value;
+            // trim() ekleyerek kazara konulan gizli boşlukları otomatik siliyoruz
+            const user = document.getElementById("crypto-user").value.trim();
+            const pass = document.getElementById("crypto-pass").value.trim();
 
             if(!user || !pass) {
                 alert("LÜTFEN TÜM ALANLARI DOLDURUN!");
@@ -136,24 +137,22 @@
             const uH = await hashData(user);
             const pH = await hashData(pass);
 
-            // KRİPTOLANMIŞ GÜVENLİK ANAHTARLARI (KODDA ŞİFRELERİNİZ ASLA GÖRÜNMEZ!)
-            // Bu karmaşık kodlar senin "CodeX Services" ve "Derya Pınar AK 07/08/2003" bilgilerinin çözülemez siber halidir.
-            const rootUser = "68c92bba4f3074fbdb41c53e053d5a420b73c4d7e9bbf0ee165a25b16e4dbfe8";
-            const rootPass = "e94326f1fa7c40685be47229cc46e9dfecfb051d92bf2ff90ee6935fa624d776";
+            // GÜVENLİK ANAHTARLARI
+            const rootUser = "68c92bba4f3074fbdb41c53e053d5a420b73c4d7e9bbf0ee165a25b16e4dbfe8"; // CodeX Services
+            const rootPass = "e94326f1fa7c40685be47229cc46e9dfecfb051d92bf2ff90ee6935fa624d776"; // Derya Pınar AK 07/08/2003
 
             if (uH === rootUser && pH === rootPass) {
                 alert("KURUCU ERİŞİMİ ONAYLANDI. CORE MATRIX YÜKLENİYOR...");
                 
-                // Tarayıcının güvenli tek seferlik hafızasına yetkiyi yazıyoruz (Sekme kapanınca kendini siler)
                 sessionStorage.setItem("matrixRole", "KURUCU");
                 sessionStorage.setItem("matrixIdentity", "CodeX Services");
                 
-                // Yönetim paneline hatasız siber geçiş
                 window.location.href = "admin.html";
             } else {
                 alert("SİBER ERİŞİM REDDEDİLDİ: GEÇERSİZ KRİPTO ANAHTARI.");
             }
         }
+
     </script>
 </body>
 </html>
