@@ -1,1 +1,270 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORE MATRIX // KURUCU DENETİM MASASI</title>
+    <link rel="stylesheet" href="https://googleapis.com">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark: #050505;
+            --kurucu: #d4af37;
+            --yonetici: #FF4500;
+            --admin: #9400D3;
+            --elit: #00FFFF;
+            --varsayilan: #C0C0C0;
+        }
+        body {
+            background: var(--dark);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 30px;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,.8) 100%),
+                        radial-gradient(#151515 1px, transparent 1px);
+            background-size: auto, 25px 25px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: var(--gold);
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        .tab-btn {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: #aaa;
+            cursor: pointer !important;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--gold);
+            color: #050505;
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+        .panel-box {
+            background: rgba(10, 10, 10, 0.85);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 25px;
+            border-radius: 18px;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+        .panel-box.active { display: block; }
+        .form-group { margin-bottom: 15px; }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus { border-color: var(--gold); outline: none; }
+        .grid-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        .list-view, .chat-view {
+            background: rgba(5,5,5,0.9);
+            border: 1px solid #222;
+            padding: 15px;
+            border-radius: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .item-row {
+            padding: 12px;
+            border-bottom: 1px solid #151515;
+            cursor: pointer !important;
+            transition: .2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .item-row:hover { background: rgba(212,175,55,0.05); color: var(--gold); }
+        .role-badge { font-size: 0.7rem; font-weight: 800; padding: 3px 8px; border-radius: 5px; text-transform: uppercase; }
+        .role-kurucu { color: var(--kurucu); background: rgba(212,175,55,0.1); border: 1px solid var(--kurucu); }
+        .role-yonetici { color: var(--yonetici); background: rgba(255,69,0,0.1); border: 1px solid var(--yonetici); }
+        .role-admin { color: var(--admin); background: rgba(148,0,211,0.1); border: 1px solid var(--admin); }
+        .role-elit { color: var(--elit); background: rgba(0,255,255,0.1); border: 1px solid var(--elit); }
+        .role-varsayilan { color: var(--varsayilan); background: rgba(192,192,192,0.1); border: 1px solid var(--varsayilan); }
+    </style>
+</head>
 
+<body>
+
+    <div class="container">
+        <h1>CORE MATRIX // KULLANICI VE CASUS DENETİM MERKEZİ</h1>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchPanel(1)">KULLANICI EKLE & YÖNET</button>
+            <button class="tab-btn" onclick="switchPanel(2)">KULLANICI SOHBET AĞACI</button>
+            <button class="tab-btn" onclick="switchPanel(3)">İKİLİ SOHBET CASUS FİLTRESİ</button>
+        </div>
+
+        <!-- 1. PANEL: KULLANICI OLUŞTURMA VE YÖNETME -->
+        <div id="panel1" class="panel-box active">
+            <h3>Yeni Siber Kimlik Tanımla</h3>
+            <div style="max-width: 500px; margin-bottom: 30px;">
+                <div class="form-group">
+                    <input type="text" id="new-user" placeholder="KULLANICI ADI" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="new-pass" placeholder="ŞİFRE">
+                </div>
+                <div class="form-group">
+                    <select id="new-role">
+                        <option value="VARSAYILAN">VARSAYILAN</option>
+                        <option value="ELİT">ELİT</option>
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="YÖNETİCİ">YÖNETİCİ</option>
+                    </select>
+                </div>
+                SİSTEME KAYDET</button>
+            </div>
+
+            <h3>Mevcut Kullanıcı Matrisi</h3>
+            <div class="list-view" id="matrix-users">
+                <div class="item-row" style="cursor:default !important;">
+                    <span>👑 CodeX Services (DOKUNULMAZ PROFiL)</span>
+                    <span class="role-badge role-kurucu">KURUCU</span>
+                </div>
+                <div class="item-row">
+                    <span>👤 Berat</span>
+                    <span class="role-badge role-yonetici">YÖNETİCİ</span>
+                </div>
+                <div class="item-row">
+                    <span>👤 Hakan</span>
+                    <span class="role-badge role-admin">ADMIN</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. PANEL: KULLANICILARIN KİMLERLE KONUŞTUĞU (SEKME 1) -->
+        <div id="panel2" class="panel-box">
+            <h3>Kullanıcı Veri Akış Ağacı</h3>
+            <div class="grid-layout">
+                <div class="list-view">
+                    <div class="item-row" onclick="viewUserNetwork('Berat')">👤 Berat</div>
+                    <div class="item-row" onclick="viewUserNetwork('Hakan')">👤 Hakan</div>
+                </div>
+                <div class="chat-view" id="network-results">
+                    <p style="color:#555;">Bağlantı ağacını ve yazışılan kişileri dökmek için soldan bir kullanıcı seçin...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. PANEL: İKİ KİŞİ ARASINDAKİ DETAYLI MESAJLAR (SEKME 2) -->
+        <div id="panel3" class="panel-box">
+            <h3>Kriptolu İkili Yazışma Geçmişi</h3>
+            <div style="margin-bottom: 20px; display:flex; gap:10px;">
+                <select id="spy-user1">
+                    <option value="">1. HEDEF SEÇ</option>
+                    <option value="Berat">Berat</option>
+                    <option value="Hakan">Hakan</option>
+                </select>
+                <select id="spy-user2">
+                    <option value="">2. HEDEF SEÇ</option>
+                    <option value="Berat">Berat</option>
+                    <option value="Hakan">Hakan</option>
+                </select>
+                <button class="tab-btn" style="background:var(--gold); color:#000;" onclick="interceptMessages()">SOHBETİ DEŞİFRE ET</button>
+            </div>
+            <div class="chat-view" id="intercept-results">
+                <p style="color:#555;">Kriptolu mesaj havuzunu çözmek için iki hedef seçip deşifre edin...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GÜVENLİK DUVARI: SADECE KURUCU GİRİŞ YAPTIYSA SAYFAYI GÖSTERİR
+        if(sessionStorage.getItem("matrixRole") !== "KURUCU") {
+            alert("SİBER GÜVENLİK İHLALİ! YETKİSİZ ERİŞİM REDDEDİLDİ.");
+            window.location.href = "index_sohbet.html";
+        }
+
+        // SEKMELER ARASI GEÇİŞ MOTORU
+        function switchPanel(num) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.panel-box').forEach(p => p.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('panel' + num).classList.add('active');
+        }
+
+        // ÇİFT AŞAMALI ONAY MEKANİZMASIYLA KULLANICI OLUŞTURMA
+        function createIdentity() {
+            const name = document.getElementById("new-user").value;
+            const r = document.getElementById("new-role").value;
+
+            if(!name) { alert("LÜTFEN GEÇERLİ BİR KULLANICI ADI YAZIN."); return; }
+
+            // Üst düzey yetki koruması
+            if(r === "YÖNETİCİ" || r === "ADMIN") {
+                let check1 = confirm(`DİKKAT: ${name} KULLANICISINA ÜST DÜZEY [${r}] YETKİSİ VERMEK ÜZERESİNİZ. EMİN MİSİNİZ?`);
+                if(check1) {
+                    let check2 = confirm(`KRİTİK ONAY: BU İŞLEM KURUCU HARİÇ TÜM SİSTEMİ ETKİLER. SON KARARINIZ MI?`);
+                    if(!check2) { alert("İŞLEM SON SANİYEDE İPTAL EDİLDİ."); return; }
+                } else { alert("İŞLEM İPTAL EDİLDİ."); return; }
+            }
+
+            alert(`${name} KULLANICISI [${r}] RÜTBESİYLE BAŞARIYLA OLUŞTURULDU! TÜM VERİLER GİZLENDİ.`);
+        }
+
+        // CASUS SEKMESİ 1: KULLANICININ KİMLERLE KONUŞTUĞUNU TARAMA
+        function viewUserNetwork(name) {
+            const res = document.getElementById("network-results");
+            res.innerHTML = `
+                <h4>${name} Kullanıcısının Aktif Temas Noktaları:</h4>
+                <div class="item-row" onclick="alert('MESAJ GEÇMİŞİ DÖKÜLÜYOR...')">💬 ${name} ➔ Hakan (SON İLETİŞİM: 4 DK ÖNCE)</div>
+                <div class="item-row" onclick="alert('MESAJ GEÇMİŞİ DÖKÜLÜYOR...')">💬 ${name} ➔ KRİPTOLU_CİHAZ_02 (SON İLETİŞİM: DÜN)</div>
+            `;
+        }
+
+        // CASUS SEKMESİ 2: İKİ KİŞİ ARASINDAKİ DETAYLI MESAJLARI İZLEME
+        function interceptMessages() {
+            const u1 = document.getElementById("spy-user1").value;
+            const u2 = document.getElementById("spy-user2").value;
+            const res = document.getElementById("intercept-results");
+
+            if(!u1 || !u2 || u1 === u2) { alert("LÜTFEN İKİ FARKLI HEDEF SEÇİN."); return; }
+
+            res.innerHTML = `
+                <h4 style="color:var(--gold);">${u1} ✖ ${u2} ARASINDAKİ ÇÖZÜLEN SİBER MESAJ AKIŞI:</h4>
+                <p><b>[${u1}]:</b> Kurucu sistemi güncelledi mi?</p>
+                <p><b>[${u2}]:</b> Evet, 3D kuantum slider ve sayaçlar kusursuz çalışıyor.</p>
+            `;
+        }
+    </script>
+</body>
+</html>
+
+  
