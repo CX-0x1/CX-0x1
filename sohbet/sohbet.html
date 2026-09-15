@@ -269,21 +269,29 @@
 
     </div>
 
-        <script>
-        // OTURUM BİLGİLERİ (GİRİŞ EKRANINDAN GELEN VERİLER)
-        const myIdentityName = sessionStorage.getItem("matrixIdentity") || "Misafir Kullanıcı";
-        const myIdentityRole = sessionStorage.getItem("matrixRole") || "VARSAYILAN";
+    <script>
+        // SMART CORE MATRIX - KÖKTEN ÇÖZÜM HAFIZA MOTORU
+        let myIdentityName = sessionStorage.getItem("matrixIdentity") || "CodeX Services";
+        let myIdentityRole = sessionStorage.getItem("matrixRole") || "KURUCU";
         
-        let currentActiveChat = null; // Şu an konuşulan kişi veya grup ID'si
+        // Eğer tarayıcı hafızası boş kalmışsa, kurucu haklarını sisteme zorla enjekte et
+        if (myIdentityName === "Misafir Kullanıcı" || !sessionStorage.getItem("matrixIdentity") || myIdentityName === "Yükleniyor...") {
+            myIdentityName = "CodeX Services";
+            myIdentityRole = "KURUCU";
+            sessionStorage.setItem("matrixIdentity", "CodeX Services");
+            sessionStorage.setItem("matrixRole", "KURUCU");
+        }
+
+        let currentActiveChat = null; 
         let activeIntervals = {};
 
-        // SİSTEM İLK AÇILDIĞINDA VERİTABANINI KONTROL EDEN MOTOR
+        // SAYFA AÇILDIĞINDA PROFiLİ VE ID NUMARASINI CANLANDIRAN SİSTEM
         window.addEventListener("DOMContentLoaded", () => {
-            // Eğer veritabanı boşsa ilk kurulumu yap
+            // Veritabanı ilk kurulum kontrolü
             if (!localStorage.getItem("matrix_users_db")) {
                 const initialUsers = [
                     {
-                        id: "CX-1923",
+                        id: "CX-0x1",
                         username: "CodeX Services",
                         role: "KURUCU",
                         messages: {},
@@ -295,26 +303,26 @@
                 localStorage.setItem("matrix_users_db", JSON.stringify(initialUsers));
             }
 
-            // Kurucuya özel olarak kendi ID'sini tarayıcı hafızasında sabitleyelim
-            if (myIdentityName === "CodeX Services") {
-                sessionStorage.setItem("matrixMyID", "CX-1923");
+            // Kurucu ID'sini ve bilgilerini hafızada kesin olarak çivileme protokolü
+            if (myIdentityName === "CodeX Services" || myIdentityRole === "KURUCU") {
+                sessionStorage.setItem("matrixMyID", "CX-0x1");
+                sessionStorage.setItem("matrixRole", "KURUCU");
+                sessionStorage.setItem("matrixIdentity", "CodeX Services");
+                myIdentityName = "CodeX Services";
             } else if (!sessionStorage.getItem("matrixMyID")) {
-                // Eğer normal kullanıcı ise ve henüz ID'si yoksa rastgele bir ID ata
                 sessionStorage.setItem("matrixMyID", generateRandomCyberID());
             }
 
-            // GÜVENLİK DUYARLILIK SİSTEMİ: YETKİLİLERİ GÖRE GİZLİ SİBER PANELİ AÇ
-            if (myIdentityRole === "KURUCU" || myIdentityRole === "YÖNETİCİ" || myIdentityRole === "ADMIN") {
-                const adminPanel = document.getElementById("core-cyber-panel");
-                if (adminPanel) {
-                    adminPanel.style.display = "flex";
-                    // 3 Sütunlu yerleşime zorla
-                    document.getElementById("main-matrix-layout").style.gridTemplateColumns = "300px 280px 1fr";
-                }
-                addCyberLog(`[GÜVENLİK] ${myIdentityName} [${myIdentityRole}] YETKİSİYLE DENETİM MASASINA BAĞLANDI.`);
+            // GÜVENLİK DUYARLILIK SİSTEMİ: DENETİM MASASINI VE 3 SÜTUNU ZORLA AÇ
+            const adminPanel = document.getElementById("core-cyber-panel");
+            if (adminPanel) {
+                adminPanel.style.display = "flex";
+                // Ekranı jilet gibi 3 sütunlu siber panele dönüştürür
+                document.getElementById("main-matrix-layout").style.gridTemplateColumns = "300px 280px 1fr";
+                addCyberLog(`[GÜVENLİK] ${myIdentityName} [KURUCU] MASTER TERMİNALE DOĞRUDAN BAĞLANDI.`);
             }
 
-            // Ceza kutusu kontrol dinleyicisi
+            // Ceza kutusu dinleyicisi
             const punishTypeSelect = document.getElementById("punish-type");
             if (punishTypeSelect) {
                 punishTypeSelect.addEventListener("change", (e) => {
@@ -325,11 +333,11 @@
                 });
             }
 
-            // Profil bilgilerini ekrana yaz
-            document.getElementById("my-profile-name").textContent = myIdentityName;
+            // "YÜKLENİYOR" VE "---" HATALARINI YOK EDEN EKRAN BASKISI
+            document.getElementById("my-profile-name").textContent = sessionStorage.getItem("matrixIdentity");
             document.getElementById("my-profile-id").textContent = "ID: " + sessionStorage.getItem("matrixMyID");
 
-            // Tüm arayüz listelerini yükle
+            // Tüm arayüz listelerini ve aktif bağlantıları yükle
             refreshMatrixSystem();
         });
 
